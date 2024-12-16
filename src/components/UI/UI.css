@@ -1,0 +1,10 @@
+.to-top-arrow {
+	z-index: 999;
+	position: fixed;
+	bottom: 1rem;
+	right: 1rem;
+	display: block;
+}
+.to-top-arrow:hover {
+	opacity: 0.4;
+}
