@@ -1,13 +1,13 @@
 import React from 'react';
-import Navbar from './Navbar';
 import Footer from './Footer';
 import { Outlet } from 'react-router';
 import ToTopArrow from '../components/UI/ToTopArrow';
+import CustomNavbar from './CustomNavbar';
 
 function Layout() {
 	return (
 		<>
-			<Navbar />
+			<CustomNavbar />
 			<Outlet />
 			<Footer />
 			<ToTopArrow />

@@ -2,9 +2,10 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import Layout from './Layout/Layout';
 import Main from './pages/Main/Main';
-import Error from './pages/Error/Error';
+import Error from './pages/ErrorPage/ErrorPage';
 import AdminControls from './pages/Users/Admin/AdminControls';
-import ItemInfo from './pages/ItemInfo/ItemInfo';
+import ItemInfo from './pages/General/ItemInfo';
+import Contact from './pages/General/Contact';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Shop from './pages/Users/Seller/Shop';
@@ -29,6 +30,7 @@ function App() {
 						<Route path='account' element={<AccountInfo />} />
 						<Route path='purchase' element={<Purchase />} />
 						<Route path='cart' element={<Cart />} />
+						<Route path='contact' element={<Contact />} />
 					</Route>
 					<Route path='/*' element={<Error />} />
 				</Routes>

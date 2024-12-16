@@ -1,5 +1,5 @@
 :root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	/* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 
@@ -9,9 +9,9 @@
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	-moz-osx-font-smoothing: grayscale; */
 }
-*,
+/* *,
 *::before,
 *::after {
 	box-sizing: border-box;
@@ -20,19 +20,19 @@
 * {
 	margin: 0;
 	padding: 0;
-	font: inherit; /* Get rid of all font sizes and heights */
+	font: inherit; /* Get rid of all font sizes and heights 
 }
 
 html {
-	color-scheme: dark light; /* Default dark */
-	hanging-punctuation: first last; /* Not supported in Chrome */
+	color-scheme: dark light; /* Default dark 
+	hanging-punctuation: first last; /* Not supported in Chrome 
 }
 
 body {
 	min-height: 100vh;
 }
 
-/* Media responsive */
+/* Media responsive 
 img,
 picture,
 svg,
@@ -52,7 +52,7 @@ h6 {
 
 p {
 	max-width: 75ch;
-	text-wrap: pretty; /* Prevents orphans on lines */
+	text-wrap: pretty; /* Prevents orphans on lines 
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -60,4 +60,4 @@ p {
 		scroll-behavior: smooth;
 		scroll-padding-top: 3rem;
 	}
-}
+} */
