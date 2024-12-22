@@ -26,6 +26,7 @@ function CustomNavbar() {
 					{user === 'admin' && (
 						<Nav.Link href='/admin-controls'>Kontrol Sayfası</Nav.Link>
 					)}
+					<Nav.Link>test</Nav.Link>
 				</Nav>
 				<Form className='d-flex'>
 					<Form.Control
