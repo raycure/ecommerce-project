@@ -2,7 +2,16 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
-function ProductItem({ title, category, price, seller, stock, brand }) {
+import { FaCircleCheck } from 'react-icons/fa6';
+function ProductItem({
+	title,
+	category,
+	price,
+	seller,
+	stock,
+	brand,
+	sellerVerified,
+}) {
 	//product id de alınır
 	return (
 		<Card style={{ width: '12rem' }}>
@@ -14,16 +23,21 @@ function ProductItem({ title, category, price, seller, stock, brand }) {
 			<Card.Body>
 				<Card.Title>{title}</Card.Title>
 				<Card.Subtitle className='mb-2 text-muted'>{brand}</Card.Subtitle>
-				{/* <Card.Text></Card.Text> */}
 				<Row>
-					<Card.Link href='#'>{seller}</Card.Link>
+					<Card.Link href='#'>
+						{seller} {sellerVerified && <FaCircleCheck />}
+					</Card.Link>
 				</Row>
 				<Button
 					href='/item-info'
 					variant='primary'
-					style={{ marginInline: '25%', marginTop: '0.5rem' }}
+					style={{
+						marginInline: '25%',
+						marginTop: '0.5rem',
+						width: 'max-content',
+					}}
 				>
-					İncele
+					{price} ₺
 				</Button>
 			</Card.Body>
 		</Card>

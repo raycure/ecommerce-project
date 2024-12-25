@@ -1,0 +1,15 @@
+.authentication-form {
+	max-width: 650px;
+	margin: 3rem auto;
+	padding: 2rem 1rem;
+	border-radius: 16px;
+	border: 1px solid #0000002d;
+}
+.login-form {
+	max-width: 550px;
+}
+.authentication-form-inner-con {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1rem;
+}

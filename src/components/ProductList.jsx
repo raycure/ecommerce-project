@@ -5,11 +5,29 @@ import Products from '../assets/Products';
 import CustomPagination from './UI/CustomPagination';
 import '../pages/Main/Main.css';
 function ProductList({ selectedCategory }) {
+	const [productSelector, setProductSelector] = useState({
+		brands: [],
+		minPrice: 0,
+		maxPrice: 0,
+		sellerVerified: false, //false olunca sadece verified olmayanlar değil hepsini göstermiş oluyor
+	});
 	const products = Products.filter((product) => {
-		if (selectedCategory === null || selectedCategory === undefined) {
-			return true;
-		}
-		return selectedCategory === product.category;
+		const isPriceValid =
+			(productSelector.minPrice <= 0 ||
+				product.price >= productSelector.minPrice) &&
+			(productSelector.maxPrice <= 0 ||
+				product.price <= productSelector.maxPrice);
+		const isSellerValid =
+			productSelector.sellerVerified === false ||
+			product.sellerVerified === productSelector.sellerVerified;
+		const isBrandValid =
+			productSelector.brands.length === 0 ||
+			productSelector.brands.includes(product.brand);
+		const isCategoryValid =
+			selectedCategory === null ||
+			selectedCategory === undefined ||
+			product.category === selectedCategory;
+		return isPriceValid && isSellerValid && isBrandValid && isCategoryValid;
 	});
 	const [paginationPageNumber, setPaginationPageNumber] = useState(1);
 	const itemsPerPage = 16;
@@ -22,28 +40,33 @@ function ProductList({ selectedCategory }) {
 	}, [selectedCategory]);
 	return (
 		<section className='product-list-outer-con'>
-			<ProductSelector />
-			<section className='product-list-inner-con'>
-				<div className='product-list-grid'>
-					{paginatedEvents.map((product) => {
-						return (
-							<ProductItem
-								title={product.title}
-								category={product.category}
-								price={product.price}
-								seller={product.seller}
-								stock={product.stock}
-								brand={product.brand}
-							/>
-						);
-					})}
-				</div>
-				<CustomPagination
-					paginationPageNumber={paginationPageNumber}
-					setPaginationPageNumber={setPaginationPageNumber}
-					pageAmount={pageAmount}
-				/>
-			</section>
+			<ProductSelector setProductSelector={setProductSelector} />
+			{products.length === 0 ? (
+				<p>Üzgünüz aradığınız kriterlerde bir ürün bulunmamaktadır.</p>
+			) : (
+				<section className='product-list-inner-con'>
+					<div className='product-list-grid'>
+						{paginatedEvents.map((product) => {
+							return (
+								<ProductItem
+									title={product.title}
+									category={product.category}
+									price={product.price}
+									seller={product.seller}
+									stock={product.stock}
+									brand={product.brand}
+									sellerVerified={product.sellerVerified}
+								/>
+							);
+						})}
+					</div>
+					<CustomPagination
+						paginationPageNumber={paginationPageNumber}
+						setPaginationPageNumber={setPaginationPageNumber}
+						pageAmount={pageAmount}
+					/>
+				</section>
+			)}
 		</section>
 	);
 }
