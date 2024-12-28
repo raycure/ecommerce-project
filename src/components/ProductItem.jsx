@@ -24,7 +24,9 @@ function ProductItem({
 				<Card.Title>{title}</Card.Title>
 				<Card.Subtitle className='mb-2 text-muted'>{brand}</Card.Subtitle>
 				<Row>
-					<Card.Link href='#'>
+					<Card.Link
+						href='/shop' //to do hold seller Id in redux
+					>
 						{seller} {sellerVerified && <FaCircleCheck />}
 					</Card.Link>
 				</Row>

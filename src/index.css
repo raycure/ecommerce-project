@@ -11,6 +11,14 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale; */
 }
+.add-product-form {
+	width: 650px;
+	margin-inline: auto;
+	padding: 3rem 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
 /* *,
 *::before,
 *::after {

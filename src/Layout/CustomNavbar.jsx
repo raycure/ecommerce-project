@@ -6,24 +6,27 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 function CustomNavbar() {
 	const loggedIn = false;
-	const user = 'shopper';
+	const userType = 'shopper';
+	const handleLogout = () => {};
 	return (
-		<Navbar sticky='top' bg='dark' data-bs-theme='dark'>
+		<Navbar sticky='top' bg='light' data-bs-theme='light'>
 			<Container>
 				<Navbar.Brand href='/'>
 					<img
-						src=''
-						width='30'
-						height='30'
+						src='/ecommerceLogo.png'
+						width='100'
+						height='45'
 						className='d-inline-block align-top'
 						alt='logo'
 					/>
 				</Navbar.Brand>
 				<Nav className='me-auto'>
 					<Nav.Link href='/'>Ana Sayfa</Nav.Link>
-					{user === 'seller' && <Nav.Link href='/shop'>Dükkanım</Nav.Link>}
-					{user !== 'admin' && <Nav.Link href='/contact'>Bize Ulaşın</Nav.Link>}
-					{user === 'admin' && (
+					{userType === 'seller' && <Nav.Link href='/shop'>Dükkanım</Nav.Link>}
+					{userType !== 'admin' && (
+						<Nav.Link href='/contact'>Bize Ulaşın</Nav.Link>
+					)}
+					{userType === 'admin' && (
 						<Nav.Link href='/admin-controls'>Kontrol Sayfası</Nav.Link>
 					)}
 				</Nav>
@@ -36,20 +39,25 @@ function CustomNavbar() {
 						style={{ borderRadius: '2rem', width: '20rem' }}
 					/>
 					<Button
-						variant='outline-light'
+						variant='outline-dark'
 						style={{
 							borderColor: 'transparent',
 							borderRadius: '1.5rem',
 							marginRight: '1rem',
 						}}
 					>
-						<FaMagnifyingGlass />
+						<FaMagnifyingGlass color='black' />
 					</Button>
 				</Form>
 				<Nav>
 					<NavDropdown title={<FaUser />} id='navbarScrollingDropdown'>
 						{loggedIn ? (
-							<NavDropdown.Item href='/account'>Hesabım</NavDropdown.Item>
+							<>
+								<NavDropdown.Item href='/account'>Hesabım</NavDropdown.Item>
+								<NavDropdown.Item onClick={() => handleLogout}>
+									Çıkış Yap
+								</NavDropdown.Item>
+							</>
 						) : (
 							<>
 								<NavDropdown.Item href='/login'>Giriş Yap</NavDropdown.Item>

@@ -4,7 +4,7 @@ import ProductItem from './ProductItem';
 import Products from '../assets/Products';
 import CustomPagination from './UI/CustomPagination';
 import '../pages/Main/Main.css';
-function ProductList({ selectedCategory }) {
+function ProductList({ selectedCategory, sellerId }) {
 	const [productSelector, setProductSelector] = useState({
 		brands: [],
 		minPrice: 0,
@@ -27,7 +27,17 @@ function ProductList({ selectedCategory }) {
 			selectedCategory === null ||
 			selectedCategory === undefined ||
 			product.category === selectedCategory;
-		return isPriceValid && isSellerValid && isBrandValid && isCategoryValid;
+		const isSellerSelected =
+			sellerId === null ||
+			sellerId === undefined ||
+			sellerId === product.seller;
+		return (
+			isPriceValid &&
+			isSellerValid &&
+			isBrandValid &&
+			isCategoryValid &&
+			isSellerSelected
+		);
 	});
 	const [paginationPageNumber, setPaginationPageNumber] = useState(1);
 	const itemsPerPage = 16;
@@ -40,7 +50,10 @@ function ProductList({ selectedCategory }) {
 	}, [selectedCategory]);
 	return (
 		<section className='product-list-outer-con'>
-			<ProductSelector setProductSelector={setProductSelector} />
+			<ProductSelector
+				sellerId={sellerId}
+				setProductSelector={setProductSelector}
+			/>
 			{products.length === 0 ? (
 				<p>Üzgünüz aradığınız kriterlerde bir ürün bulunmamaktadır.</p>
 			) : (

@@ -118,6 +118,12 @@ function Register() {
 					/>
 				</FloatingLabel>
 			</InputGroup>
+			<Form.Group className='mb-3'>
+				<Form.Check
+					type='checkbox'
+					label='Kullanım koşullarını okudum ve kabul ediyorum.'
+				/>
+			</Form.Group>
 			<span style={{ display: 'flex' }}>
 				<Button
 					style={{ marginInline: 'auto' }}

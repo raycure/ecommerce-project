@@ -2,7 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import '../pages/Main/Main.css';
 import brands from '../assets/Brands';
-function ProductSelector({ setProductSelector }) {
+function ProductSelector({ setProductSelector, sellerId }) {
 	const handleProductSelector = (e) => {
 		if (e.target.type === 'number') {
 			setProductSelector((prev) => ({
@@ -69,24 +69,26 @@ function ProductSelector({ setProductSelector }) {
 					/>
 				</Form.Group>
 			</Form>
-			<Form>
-				<Form.Text>Satıcı Türü</Form.Text>
-				<Form.Check
-					value={false}
-					name='sellerVerified'
-					defaultChecked
-					type='radio'
-					label='Tümü'
-					onChange={handleProductSelector}
-				/>
-				<Form.Check
-					value={true}
-					onChange={handleProductSelector}
-					name='sellerVerified'
-					type='radio'
-					label='Doğrulanmış'
-				/>
-			</Form>
+			{!sellerId && (
+				<Form>
+					<Form.Text>Satıcı Türü</Form.Text>
+					<Form.Check
+						value={false}
+						name='sellerVerified'
+						defaultChecked
+						type='radio'
+						label='Tümü'
+						onChange={handleProductSelector}
+					/>
+					<Form.Check
+						value={true}
+						onChange={handleProductSelector}
+						name='sellerVerified'
+						type='radio'
+						label='Doğrulanmış'
+					/>
+				</Form>
+			)}
 		</section>
 	);
 }
