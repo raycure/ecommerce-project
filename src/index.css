@@ -1,15 +1,4 @@
 :root {
-	/* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
-
-	color: #ffffffde;
-	background-color: #242424;
-
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale; */
 }
 .add-product-form {
 	width: 650px;
@@ -19,53 +8,34 @@
 	flex-direction: column;
 	justify-content: center;
 }
-/* *,
-*::before,
-*::after {
-	box-sizing: border-box;
+.account-info-outer-con {
+	max-width: 800px;
+	margin: 1rem auto;
+	padding: 3rem 2rem;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #0000002d;
+	border-radius: 0.5rem;
 }
-
-* {
-	margin: 0;
-	padding: 0;
-	font: inherit; /* Get rid of all font sizes and heights 
+.item-info-outer-con {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	max-width: fit-content;
+	margin-inline: auto;
+	padding: 6rem 1rem;
+	gap: 4rem;
 }
-
-html {
-	color-scheme: dark light; /* Default dark 
-	hanging-punctuation: first last; /* Not supported in Chrome 
+.quantity-button-container {
+	border-radius: 6px;
+	border: 1px solid #0000002d;
+	overflow: hidden;
+	max-width: max-content;
+	display: flex;
 }
-
-body {
-	min-height: 100vh;
+.quantity-button-container > * {
+	padding: 0.5rem 1rem;
+	border: none;
 }
-
-/* Media responsive 
-img,
-picture,
-svg,
-video {
-	display: block;
-	max-width: 100%;
+.quantity-button-container button:active {
+	background-color: #ddd8d8;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	text-wrap: balance;
-}
-
-p {
-	max-width: 75ch;
-	text-wrap: pretty; /* Prevents orphans on lines 
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	:has(:target) {
-		scroll-behavior: smooth;
-		scroll-padding-top: 3rem;
-	}
-} */

@@ -17,7 +17,7 @@ function ProductItem({
 		<Card style={{ width: '12rem' }}>
 			<Card.Img
 				variant='top'
-				style={{ height: '16rem', objectFit: 'cover' }}
+				style={{ height: '16rem', objectFit: 'scale-down' }}
 				src='https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6'
 			/>
 			<Card.Body>

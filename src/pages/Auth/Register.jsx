@@ -10,8 +10,6 @@ function Register() {
 	const [registerForm, setRegisterForm] = useState({
 		name: '',
 		surname: '',
-		email: '',
-		phone: '',
 		password: '',
 	});
 	const handleRegisterForm = (e) => {
@@ -105,10 +103,10 @@ function Register() {
 				</FloatingLabel>
 			)}
 			<InputGroup className='mb-3'>
-				<InputGroup.Text id='basic-addon1'>
+				<InputGroup.Text>
 					<MdOutlineVpnKey />
 				</InputGroup.Text>
-				<FloatingLabel controlId='floatingInput' label='Şifre'>
+				<FloatingLabel label='Şifre'>
 					<Form.Control
 						required
 						onChange={handleRegisterForm}

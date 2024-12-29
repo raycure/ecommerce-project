@@ -7,6 +7,7 @@ import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router';
 function Shop() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const sellerName = 'Cem Balcı'; //normalde id
@@ -67,7 +68,11 @@ function Shop() {
 							</Card.Text>
 						)
 					) : (
-						<Card.Text>Bu sizin dükkanınız, eğer</Card.Text>
+						<Card.Text>
+							Bu sizin dükkanınız, eğer bilgilerinizde bir değişiklik yapmak
+							istiyorsanız <Link to='/account'>Hesabım</Link> linkini
+							kullanabilirsiniz.
+						</Card.Text>
 					)}
 				</div>
 				{userType === 'seller' ? (

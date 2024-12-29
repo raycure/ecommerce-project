@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import brands from '../../../assets/Brands';
 import Row from 'react-bootstrap/Row';
+import InputGroup from 'react-bootstrap/InputGroup';
 function AddItem() {
 	const [productData, setProductData] = useState({
 		name: '',
@@ -52,6 +53,7 @@ function AddItem() {
 			category: selectedCategoryIndex,
 		}));
 	};
+	const handleProductSubmit = () => {};
 	return (
 		<Form className='add-product-form'>
 			<Form.Group className='mb-3'>
@@ -97,9 +99,20 @@ function AddItem() {
 					placeholder='https://resim-linki.com'
 				/>
 			</Form.Group>
+			<Form.Group className='mb-3'>
+				<Form.Label>Fiyat</Form.Label>
+				<InputGroup className='mb-3'>
+					<InputGroup.Text>₺</InputGroup.Text>
+					<Form.Control
+						onChange={handleProductData}
+						name='price'
+						placeholder='00.00'
+					/>
+				</InputGroup>
+			</Form.Group>
 			<Button
-				type='button'
-				onClick={() => console.log(productData)}
+				type='submit'
+				onClick={handleProductSubmit}
 				style={{ width: 'max-content', marginInline: 'auto' }}
 			>
 				Ürünü Ekle
