@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button, Container, Form, Nav, NavDropdown } from 'react-bootstrap';
+import Nav from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/Container';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Navbar from 'react-bootstrap/Navbar';
 import { FaUser } from 'react-icons/fa6';
 import { FaShoppingCart } from 'react-icons/fa';
-import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	setUserType,
 	setUserId,
 	resetUserInfo,
 } from '../redux/Slices/UserInfoSlice';
+import SearchBar from '../components/UI/SearchBar';
 function CustomNavbar() {
 	const dispatch = useDispatch();
 	const userInfo = useSelector((state) => state.userInfo);
@@ -44,25 +46,7 @@ function CustomNavbar() {
 						<Nav.Link href='/admin-controls'>Kontrol Sayfası</Nav.Link>
 					)}
 				</Nav>
-				<Form className='d-flex'>
-					<Form.Control
-						type='search'
-						placeholder='Ara'
-						className='me-2'
-						aria-label='Search'
-						style={{ borderRadius: '2rem', width: '20rem' }}
-					/>
-					<Button
-						variant='outline-dark'
-						style={{
-							borderColor: 'transparent',
-							borderRadius: '1.5rem',
-							marginRight: '1rem',
-						}}
-					>
-						<FaMagnifyingGlass color='black' />
-					</Button>
-				</Form>
+				<SearchBar />
 				<Nav>
 					<NavDropdown title={<FaUser />} id='navbarScrollingDropdown'>
 						{loggedIn ? (

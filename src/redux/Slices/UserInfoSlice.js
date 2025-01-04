@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	userType: null, // admin, shopper ve seller optionları var
+	userType: 'shopper', // admin, shopper ve seller optionları var
 	userId: null,
 };
 
