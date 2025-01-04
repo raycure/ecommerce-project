@@ -3,7 +3,6 @@ import ProductSelector from './ProductSelector';
 import ProductItem from './ProductItem';
 import Products from '../assets/Products';
 import CustomPagination from './UI/CustomPagination';
-import '../pages/Main/Main.css';
 function ProductList({ selectedCategory, sellerId }) {
 	const [productSelector, setProductSelector] = useState({
 		brands: [],
@@ -47,7 +46,11 @@ function ProductList({ selectedCategory, sellerId }) {
 	const pageAmount = Math.ceil(products.length / itemsPerPage);
 	useEffect(() => {
 		setPaginationPageNumber(1);
-	}, [selectedCategory]);
+	}, [
+		selectedCategory,
+		productSelector.sellerVerified,
+		productSelector.brands,
+	]);
 	return (
 		<section className='product-list-outer-con'>
 			<ProductSelector
@@ -59,18 +62,8 @@ function ProductList({ selectedCategory, sellerId }) {
 			) : (
 				<section className='product-list-inner-con'>
 					<div className='product-list-grid'>
-						{paginatedEvents.map((product) => {
-							return (
-								<ProductItem
-									title={product.title}
-									category={product.category}
-									price={product.price}
-									seller={product.seller}
-									stock={product.stock}
-									brand={product.brand}
-									sellerVerified={product.sellerVerified}
-								/>
-							);
+						{paginatedEvents.map((product, index) => {
+							return <ProductItem key={index} product={product} />;
 						})}
 					</div>
 					<CustomPagination

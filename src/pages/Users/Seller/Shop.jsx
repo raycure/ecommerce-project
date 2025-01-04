@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import CategoriesBar from '../../../components/CategoriesBar';
 import ProductList from '../../../components/ProductList';
-import '../../Main/Main.css';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';

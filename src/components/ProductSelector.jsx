@@ -1,6 +1,5 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import '../pages/Main/Main.css';
 import brands from '../assets/Brands';
 function ProductSelector({ setProductSelector, sellerId }) {
 	const handleProductSelector = (e) => {

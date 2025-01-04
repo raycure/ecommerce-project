@@ -27,6 +27,7 @@ function CustomPagination({
 			<Pagination.Prev onClick={prePage} />
 			{paginationNumbers.map((number, index) => (
 				<Pagination.Item
+					key={index}
 					active={paginationPageNumber === number}
 					onClick={() => changePageNumber(number)}
 				>

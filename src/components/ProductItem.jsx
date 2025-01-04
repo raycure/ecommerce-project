@@ -3,16 +3,16 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { FaCircleCheck } from 'react-icons/fa6';
-function ProductItem({
-	title,
-	category,
-	price,
-	seller,
-	stock,
-	brand,
-	sellerVerified,
-}) {
+import { useNavigate } from 'react-router';
+import { IoTrashOutline } from 'react-icons/io5';
+function ProductItem({ product }) {
+	const navigate = useNavigate();
 	//product id de alınır
+	const userType = 'admin';
+	const handleProductSelect = () => {
+		navigate('/item-info');
+	};
+	const handleProductDelete = () => {};
 	return (
 		<Card style={{ width: '12rem' }}>
 			<Card.Img
@@ -21,26 +21,43 @@ function ProductItem({
 				src='https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6'
 			/>
 			<Card.Body>
-				<Card.Title>{title}</Card.Title>
-				<Card.Subtitle className='mb-2 text-muted'>{brand}</Card.Subtitle>
+				<Card.Title>{product.title}</Card.Title>
+				<Card.Subtitle className='mb-2 text-muted'>
+					{product.brand}
+				</Card.Subtitle>
 				<Row>
 					<Card.Link
 						href='/shop' //to do hold seller Id in redux
 					>
-						{seller} {sellerVerified && <FaCircleCheck />}
+						{product.seller} {product.sellerVerified && <FaCircleCheck />}
 					</Card.Link>
 				</Row>
 				<Button
-					href='/item-info'
+					className='mt-1'
+					onClick={handleProductSelect}
 					variant='primary'
 					style={{
-						marginInline: '25%',
-						marginTop: '0.5rem',
-						width: 'max-content',
+						width: '100%',
 					}}
 				>
-					{price} ₺
+					{product.price} ₺
 				</Button>
+				{userType === 'admin' && (
+					<Button
+						className='mt-1'
+						onClick={handleProductDelete}
+						variant='danger'
+						style={{
+							width: '100%',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							gap: '3px',
+						}}
+					>
+						<IoTrashOutline /> Sil
+					</Button>
+				)}
 			</Card.Body>
 		</Card>
 	);

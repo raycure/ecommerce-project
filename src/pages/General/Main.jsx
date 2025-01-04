@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Main.css';
 import CategoriesBar from '../../components/CategoriesBar';
 import ProductList from '../../components/ProductList';
 import AdCarousel from '../../components/AdCarousel';
