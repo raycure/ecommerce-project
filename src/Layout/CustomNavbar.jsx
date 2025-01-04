@@ -4,10 +4,24 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FaUser } from 'react-icons/fa6';
 import { FaShoppingCart } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	setUserType,
+	setUserId,
+	resetUserInfo,
+} from '../redux/Slices/UserInfoSlice';
 function CustomNavbar() {
-	const loggedIn = false;
-	const userType = 'shopper';
-	const handleLogout = () => {};
+	const dispatch = useDispatch();
+	const userInfo = useSelector((state) => state.userInfo);
+	const handleLogin = () => {
+		dispatch(setUserType('admin'));
+		dispatch(setUserId(123));
+	};
+	const loggedIn = userInfo.userId !== null;
+	const userType = userInfo.userType;
+	const handleLogout = () => {
+		dispatch(resetUserInfo());
+	};
 	return (
 		<Navbar sticky='top' bg='light' data-bs-theme='light'>
 			<Container>
@@ -54,7 +68,7 @@ function CustomNavbar() {
 						{loggedIn ? (
 							<>
 								<NavDropdown.Item href='/account'>Hesabım</NavDropdown.Item>
-								<NavDropdown.Item onClick={() => handleLogout}>
+								<NavDropdown.Item onClick={handleLogout}>
 									Çıkış Yap
 								</NavDropdown.Item>
 							</>
@@ -68,6 +82,7 @@ function CustomNavbar() {
 					<Nav.Link href='/cart'>
 						<FaShoppingCart />
 					</Nav.Link>
+					<button onClick={handleLogin}>test login</button>
 				</Nav>
 			</Container>
 		</Navbar>

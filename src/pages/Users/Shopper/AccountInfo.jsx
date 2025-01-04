@@ -6,9 +6,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { useSelector } from 'react-redux';
 function AccountInfo() {
-	const userType = 'shopper';
-	const [userInfo, setUserInfo] = useState({
+	const userInfo = useSelector((state) => state.userInfo);
+	const userType = userInfo.userType;
+	const [userAccountInfo, setUserAccountInfo] = useState({
 		name: 'Cemil',
 		surname: 'Uçar',
 		address: 'Esenyurt, 34510 Esenyurt/İstanbul',
@@ -27,27 +29,27 @@ function AccountInfo() {
 			'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6',
 	};
 	const [inputFullNameValue, setInputFullNameValue] = useState(
-		userInfo.name + ' ' + userInfo.surname
+		userAccountInfo.name + ' ' + userAccountInfo.surname
 	);
 	const handleSetName = (e) => {
 		const words = inputFullNameValue.trim().split(' ');
 		const name = words.slice(0, -1).join(' ');
 		const surname = words.slice(-1).join('');
 
-		setUserInfo((prev) => ({
+		setUserAccountInfo((prev) => ({
 			...prev,
 			name: name,
 			surname: surname,
 		}));
 	};
-	const handleSetUserInfo = (e) => {
-		setUserInfo((prev) => ({
+	const handleSetUserAccountInfo = (e) => {
+		setUserAccountInfo((prev) => ({
 			...prev,
 			[e.target.name]: e.target.value,
 		}));
 	};
-	const handleUSerInfoUpdate = () => {};
-	const handleUSerInfoDelete = () => {};
+	const handleUserAccountInfoUpdate = () => {};
+	const handleUserAccountInfoDelete = () => {};
 	return (
 		<Form className='account-info-outer-con'>
 			<Card.Title>Hesap Bilgilerim</Card.Title>
@@ -71,7 +73,7 @@ function AccountInfo() {
 					>
 						<Image
 							style={{ width: '9rem', height: '9rem', objectFit: 'cover' }}
-							src={userInfo.image}
+							src={userAccountInfo.image}
 							roundedCircle
 						/>
 						<Form.Text>Yeni Profil Resmi</Form.Text>
@@ -89,11 +91,11 @@ function AccountInfo() {
 							giriniz.
 						</Form.Text>
 						<Form.Control
-							value={userInfo.image}
+							value={userAccountInfo.image}
 							type='text'
 							placeholder='https://resim-linki.com'
 							name='image'
-							onChange={handleSetUserInfo}
+							onChange={handleSetUserAccountInfo}
 						/>
 					</Form.Group>
 				</Form.Group>
@@ -120,11 +122,11 @@ function AccountInfo() {
 						<Form.Text>{userPrevData.phone}</Form.Text>
 						<FloatingLabel label='Yeni Telefon'>
 							<Form.Control
-								value={userInfo.phone}
+								value={userAccountInfo.phone}
 								type='text'
 								placeholder='Telefon'
 								name='phone'
-								onChange={handleSetUserInfo}
+								onChange={handleSetUserAccountInfo}
 							/>
 						</FloatingLabel>
 					</Form.Group>
@@ -134,11 +136,11 @@ function AccountInfo() {
 				<Form.Text>{userPrevData.email}</Form.Text>
 				<FloatingLabel label='Yeni Email'>
 					<Form.Control
-						value={userInfo.email}
+						value={userAccountInfo.email}
 						type='text'
 						placeholder='Email'
 						name='email'
-						onChange={handleSetUserInfo}
+						onChange={handleSetUserAccountInfo}
 					/>
 				</FloatingLabel>
 			</Form.Group>
@@ -147,11 +149,11 @@ function AccountInfo() {
 					<Form.Text>{userPrevData.address}</Form.Text>
 					<FloatingLabel label='Yeni Adres'>
 						<Form.Control
-							value={userInfo.address}
+							value={userAccountInfo.address}
 							type='text'
 							placeholder='Adres'
 							name='address'
-							onChange={handleSetUserInfo}
+							onChange={handleSetUserAccountInfo}
 							as='textarea'
 							style={{ height: '100px' }}
 						/>
@@ -167,13 +169,17 @@ function AccountInfo() {
 					gap: '1rem',
 				}}
 			>
-				<Button variant='primary' type='submit' onClick={handleUSerInfoUpdate}>
+				<Button
+					variant='primary'
+					type='submit'
+					onClick={handleUserAccountInfoUpdate}
+				>
 					Değişiklikleri Kaydet
 				</Button>
 				<Button
 					variant='outline-danger'
 					type='submit'
-					onClick={handleUSerInfoDelete}
+					onClick={handleUserAccountInfoDelete}
 				>
 					Hesabı Sil
 				</Button>

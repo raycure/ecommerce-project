@@ -7,12 +7,14 @@ import Card from 'react-bootstrap/Card';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router';
+import { useSelector } from 'react-redux';
 function Shop() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
+	const userInfo = useSelector((state) => state.userInfo);
+	const userType = userInfo.userType;
 	const sellerName = 'Cem Balcı'; //normalde id
 	const sellerVerified = true;
 	const sellerBanned = false;
-	const userType = 'seller'; //seller, shopper, admin
 	const buttonConStyle = {
 		display: 'flex',
 		height: 'max-content',

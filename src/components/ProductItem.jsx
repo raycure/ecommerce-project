@@ -5,10 +5,12 @@ import Row from 'react-bootstrap/Row';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 import { IoTrashOutline } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
 function ProductItem({ product }) {
+	const userInfo = useSelector((state) => state.userInfo);
+	const userType = userInfo.userType;
 	const navigate = useNavigate();
 	//product id de alınır
-	const userType = 'admin';
 	const handleProductSelect = () => {
 		navigate('/item-info');
 	};
