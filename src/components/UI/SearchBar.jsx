@@ -1,26 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { FaMagnifyingGlass } from 'react-icons/fa6';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { useNavigate } from 'react-router';
 function SearchBar() {
+	const [searchValue, setSearchValue] = useState('');
+	const [suggestions, setSuggestions] = useState([]);
+	const navigate = useNavigate();
+	const handleSearchPropertyUpdate = (e) => {
+		setSearchValue(e.target.value);
+	};
+	useEffect(() => {
+		const fetchSearchSuggestions = () => {
+			// https://dummyjson.com/users/search?q=Jo
+			if (searchValue.trim() === '') {
+				setSuggestions([]);
+				return;
+			}
+			fetch(`https://dummyjson.com/users/search?q=${searchValue}`)
+				.then((res) => res.json())
+				.then((data) => setSuggestions(data))
+				.catch((err) => {
+					console.error(err);
+				});
+		};
+		fetchSearchSuggestions();
+		console.log(suggestions.length);
+	}, [searchValue]);
+	const handleProductPick = () => {
+		navigate('/item-info');
+	};
 	return (
 		<Form className='d-flex'>
+			<Dropdown show={suggestions?.users?.length > 0}>
+				<Dropdown.Menu style={{ width: '320px' }}>
+					{suggestions?.users?.map((user) => {
+						return (
+							<Dropdown.Item onClick={handleProductPick}>
+								{user.firstName}
+							</Dropdown.Item>
+						);
+					})}
+				</Dropdown.Menu>
+			</Dropdown>
 			<Form.Control
 				type='search'
-				placeholder='Ara'
+				placeholder='Ürün ismi...'
+				name='searchValue'
 				className='me-2'
+				value={searchValue}
+				onChange={handleSearchPropertyUpdate}
 				aria-label='Search'
-				style={{ borderRadius: '2rem', width: '20rem' }}
+				style={{ width: '20rem' }}
 			/>
-			<Button
-				variant='outline-dark'
-				style={{
-					borderRadius: '1.5rem',
-					marginRight: '1rem',
-				}}
-			>
-				<FaMagnifyingGlass color='black' />
-			</Button>
 		</Form>
 	);
 }

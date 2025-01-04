@@ -12,9 +12,13 @@ function Shop() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
-	const sellerName = 'Cem Balcı'; //normalde id
-	const sellerVerified = true;
-	const sellerBanned = false;
+	const userId = userInfo.userId;
+	const [sellerInfo, setSellerInfo] = useState({
+		sellerName: 'Cem Balcı',
+		sellerId: 123,
+		sellerVerified: true,
+		sellerBanned: false,
+	});
 	const buttonConStyle = {
 		display: 'flex',
 		height: 'max-content',
@@ -46,18 +50,20 @@ function Shop() {
 				>
 					<Card.Title>
 						{[
-							sellerName,
+							sellerInfo.sellerName,
 							' ',
-							sellerVerified && <FaCircleCheck color='blue' />,
+							sellerInfo.sellerVerified && (
+								<FaCircleCheck color='deepskyblue' />
+							),
 						]}
 					</Card.Title>
 					{userType !== 'seller' ? (
-						sellerVerified ? (
+						sellerInfo.sellerVerified ? (
 							<Card.Text>
 								Bu doğrulanmış bir satıcıdır, alışveriş yaparken gönül
 								rahatlığıyla devam edebilirsiniz.
 							</Card.Text>
-						) : !sellerBanned ? (
+						) : !sellerInfo.sellerBanned ? (
 							<Card.Text>
 								Bu satıcı henüz doğrulanamamıştır, doğrulanmamış satıcılardan
 								alışveriş yaparken dikkatli olunuz.
@@ -68,12 +74,14 @@ function Shop() {
 								yapamazsınız.
 							</Card.Text>
 						)
-					) : (
+					) : userType === 'seller' && userId === sellerInfo.sellerId ? (
 						<Card.Text>
 							Bu sizin dükkanınız, eğer bilgilerinizde bir değişiklik yapmak
 							istiyorsanız <Link to='/account'>Hesabım</Link> linkini
 							kullanabilirsiniz.
 						</Card.Text>
+					) : (
+						<></>
 					)}
 				</div>
 				{userType === 'seller' ? (
@@ -92,14 +100,14 @@ function Shop() {
 				)}
 			</Container>
 
-			{!sellerBanned && (
+			{!sellerInfo.sellerBanned && (
 				<section>
 					<CategoriesBar
 						selectedCategory={selectedCategory}
 						setSelectedCategory={setSelectedCategory}
 					/>
 					<ProductList
-						sellerId={sellerName}
+						sellerId={sellerInfo.sellerName}
 						selectedCategory={selectedCategory}
 					/>
 				</section>

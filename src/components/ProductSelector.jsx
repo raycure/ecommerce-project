@@ -34,7 +34,7 @@ function ProductSelector({ setProductSelector, sellerId }) {
 		<section className='product-selector-outer-con'>
 			<Form>
 				<Form.Text>Markalar</Form.Text>
-				{brands.map((brand) => (
+				{brands.map((brand, index) => (
 					<Form.Check
 						onChange={(e) => {
 							e.target.checked
@@ -45,6 +45,7 @@ function ProductSelector({ setProductSelector, sellerId }) {
 						type='switch'
 						id={brand}
 						label={brand}
+						key={index}
 					/>
 				))}
 			</Form>

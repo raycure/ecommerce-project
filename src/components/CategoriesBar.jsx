@@ -69,11 +69,12 @@ function CategoriesBar({ selectedCategory, setSelectedCategory }) {
 				>
 					Tüm Ürünler
 				</NavDropdown.Item>
-				{categories.map((category) => (
+				{categories.map((category, index) => (
 					<NavDropdown.Item
 						active={category === selectedCategory}
 						eventKey={category}
 						onClick={() => setSelectedCategory(category)}
+						key={index}
 					>
 						{category}
 					</NavDropdown.Item>

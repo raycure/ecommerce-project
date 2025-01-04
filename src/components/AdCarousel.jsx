@@ -10,12 +10,13 @@ function AdCarousel() {
 	];
 	return (
 		<Carousel>
-			{adPicData.map((image) => (
+			{adPicData.map((image, index) => (
 				<Carousel.Item
 					style={{
 						height: '75vh',
 					}}
 					interval={2000}
+					key={index}
 				>
 					<img
 						style={{
