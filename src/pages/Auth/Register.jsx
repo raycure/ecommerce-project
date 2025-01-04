@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import './Auth.css';
+import { requestService } from '../../redux/requestService';
+import { useDispatch } from 'react-redux';
 function Register() {
-	const [userType, setUserType] = useState('customer');
+	const dispatch = useDispatch();
 	const [registerForm, setRegisterForm] = useState({
 		name: '',
 		surname: '',
 		password: '',
+		userType: 'customer',
 	});
 	const handleRegisterForm = (e) => {
 		setRegisterForm((prev) => ({
@@ -18,7 +21,17 @@ function Register() {
 			[e.target.name]: e.target.value,
 		}));
 	};
-	const handleFormSubmit = () => {};
+
+	async function handleFormSubmit() {
+		const response = await dispatch(
+			requestService({
+				data: registerForm,
+				endpoint: 'user/register',
+				method: 'POST',
+			})
+		);
+		console.log('response in register', response);
+	}
 	return (
 		<Form className='authentication-form'>
 			<FloatingLabel
@@ -27,8 +40,9 @@ function Register() {
 				className='mb-3'
 			>
 				<Form.Select
-					onChange={(e) => setUserType(e.target.value)}
+					onChange={handleRegisterForm}
 					defaultValue='customer'
+					name='userType'
 					required
 				>
 					<option value='customer'>Alıcı</option>
@@ -81,7 +95,7 @@ function Register() {
 					placeholder='05055034455'
 				/>
 			</FloatingLabel>
-			{userType === 'customer' && (
+			{registerForm.userType === 'customer' && (
 				<FloatingLabel
 					style={{ marginBottom: '1rem' }}
 					controlId='floatingTextarea2'
@@ -125,7 +139,7 @@ function Register() {
 			<span style={{ display: 'flex' }}>
 				<Button
 					style={{ marginInline: 'auto' }}
-					onClick={() => handleFormSubmit}
+					onClick={handleFormSubmit}
 					variant='outline-primary'
 				>
 					Kaydol

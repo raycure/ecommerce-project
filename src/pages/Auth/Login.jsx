@@ -6,7 +6,10 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { MdOutlineVpnKey } from 'react-icons/md';
 import { FaUserLock } from 'react-icons/fa';
 import './Auth.css';
+import { useDispatch } from 'react-redux';
+import { requestService } from '../../redux/requestService';
 function Login() {
+	const dispatch = useDispatch();
 	const [loginForm, setLoginForm] = useState({
 		email: '',
 		phone: '',
@@ -18,7 +21,16 @@ function Login() {
 			[e.target.name]: e.target.value,
 		}));
 	};
-	const handleFormSubmit = () => {};
+	async function handleFormSubmit() {
+		const response = await dispatch(
+			requestService({
+				data: loginForm,
+				endpoint: 'user/login',
+				method: 'POST',
+			})
+		);
+		console.log('response in register', response);
+	}
 	return (
 		<Form className='authentication-form login-form'>
 			<span style={{ display: 'flex' }}>
@@ -67,7 +79,7 @@ function Login() {
 			<span style={{ display: 'flex' }}>
 				<Button
 					style={{ marginInline: 'auto' }}
-					onClick={() => handleFormSubmit}
+					onClick={handleFormSubmit}
 					variant='outline-primary'
 				>
 					Giriş Yap

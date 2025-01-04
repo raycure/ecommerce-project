@@ -13,28 +13,32 @@ import AddItem from './pages/Users/Seller/AddItem';
 import AccountInfo from './pages/Users/Shopper/AccountInfo';
 import Cart from './pages/Users/Shopper/Cart';
 import Purchase from './pages/Users/Shopper/Purchase';
+import { Provider } from 'react-redux';
+import store from './redux/store.js';
 
 function App() {
 	return (
 		<>
-			<BrowserRouter>
-				<Routes>
-					<Route path='/' element={<Layout />}>
-						<Route index element={<Main />} />
-						<Route path='admin-controls' element={<AdminControls />} />
-						<Route path='item-info' element={<ItemInfo />} />
-						<Route path='login' element={<Login />} />
-						<Route path='register' element={<Register />} />
-						<Route path='shop' element={<Shop />} />
-						<Route path='add-product' element={<AddItem />} />
-						<Route path='account' element={<AccountInfo />} />
-						<Route path='purchase' element={<Purchase />} />
-						<Route path='cart' element={<Cart />} />
-						<Route path='contact' element={<Contact />} />
-					</Route>
-					<Route path='/*' element={<Error />} />
-				</Routes>
-			</BrowserRouter>
+			<Provider store={store}>
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<Layout />}>
+							<Route index element={<Main />} />
+							<Route path='admin-controls' element={<AdminControls />} />
+							<Route path='item-info' element={<ItemInfo />} />
+							<Route path='login' element={<Login />} />
+							<Route path='register' element={<Register />} />
+							<Route path='shop' element={<Shop />} />
+							<Route path='add-product' element={<AddItem />} />
+							<Route path='account' element={<AccountInfo />} />
+							<Route path='purchase' element={<Purchase />} />
+							<Route path='cart' element={<Cart />} />
+							<Route path='contact' element={<Contact />} />
+						</Route>
+						<Route path='/*' element={<Error />} />
+					</Routes>
+				</BrowserRouter>
+			</Provider>
 		</>
 	);
 }
