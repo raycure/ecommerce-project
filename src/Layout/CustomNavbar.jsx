@@ -16,7 +16,7 @@ function CustomNavbar() {
 	const dispatch = useDispatch();
 	const userInfo = useSelector((state) => state.userInfo);
 	const handleLogin = () => {
-		dispatch(setUserType('seller'));
+		dispatch(setUserType('admin'));
 		dispatch(setUserId(123));
 	};
 	const loggedIn = userInfo.userId !== null;
