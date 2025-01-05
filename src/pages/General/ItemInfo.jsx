@@ -3,14 +3,15 @@ import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { addOrderItem } from '../../redux/Slices/OrderInfoSlice';
 function ItemInfo() {
-	const [itemQuantity, setItemQuantity] = useState(1);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
 	const userId = userInfo.userId;
+	const [itemAmount, setItemAmount] = useState(1);
 	const productInfo = {
 		name: 'iPhone 14',
 		brand: 'Apple',
@@ -20,21 +21,31 @@ function ItemInfo() {
 		stock: 6,
 		price: 200.0,
 		sellerId: 123,
-	};
-	const handleQuantityIncrease = () => {
-		if (productInfo.stock <= itemQuantity) {
+		productId: 12,
+		seller_productId: 1,
+	}; //bunlar değişen bilgiler değil o yuzden sadece amount stateli
+	const handleAmountIncrease = () => {
+		if (productInfo.stock <= itemAmount) {
 			return false;
 		}
-		setItemQuantity((prev) => prev + 1);
+		setItemAmount((prev) => prev + 1);
 	};
-	const handleQuantityDecrease = () => {
-		if (1 >= itemQuantity) {
+	const handleAmountDecrease = () => {
+		if (1 >= itemAmount) {
 			return false;
 		}
-		setItemQuantity((prev) => prev - 1);
+		setItemAmount((prev) => prev - 1);
 	};
 	const handleProductSubmit = () => {
-		//redux
+		dispatch(
+			addOrderItem({
+				productId: productInfo.productId,
+				seller_productId: productInfo.seller_productId,
+				sellerId: productInfo.sellerId,
+				amount: itemAmount,
+				price: productInfo.price,
+			})
+		);
 		navigate('/cart');
 	};
 	const handleProductUpdate = () => {
@@ -63,12 +74,12 @@ function ItemInfo() {
 
 				<Card.Text className='mb-0'>Miktar</Card.Text>
 				<div className='quantity-button-container'>
-					<button onClick={handleQuantityDecrease}>-</button>
-					<p className='mb-0'>{itemQuantity}</p>
-					<button onClick={handleQuantityIncrease}>+</button>
+					<button onClick={handleAmountDecrease}>-</button>
+					<p className='mb-0'>{itemAmount}</p>
+					<button onClick={handleAmountIncrease}>+</button>
 				</div>
 				<Card.Text className='mb-4'>
-					Toplam fiyat {itemQuantity * productInfo.price} ₺
+					Toplam fiyat {itemAmount * productInfo.price} ₺
 				</Card.Text>
 
 				{userType === 'seller' && userId === productInfo.sellerId ? (

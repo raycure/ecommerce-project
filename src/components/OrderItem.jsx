@@ -3,9 +3,11 @@ import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { addOrderItem, removeOrderItem } from '../redux/Slices/OrderInfoSlice';
 function orderItem({ orderItem }) {
-	const [itemQuantity, setItemQuantity] = useState(orderItem.amount);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const orderItemData = {
 		image:
 			'https://hips.hearstapps.com/hmg-prod/images/shrek-forever-after-1587549453.jpg?crop=0.676xw:0.901xh;0.0969xw,0&resize=640:*',
@@ -15,19 +17,13 @@ function orderItem({ orderItem }) {
 		sellerName: 'Camil Boyundur',
 		stock: 11,
 	};
-	const handleQuantityIncrease = () => {
-		if (orderItemData.stock <= itemQuantity) {
-			return false;
-		}
-		setItemQuantity((prev) => prev + 1);
+	const handleOrderItemDelete = () => {
+		dispatch(
+			removeOrderItem({
+				seller_productId: orderItem.seller_productId,
+			})
+		);
 	};
-	const handleQuantityDecrease = () => {
-		if (1 >= itemQuantity) {
-			return false;
-		}
-		setItemQuantity((prev) => prev - 1);
-	};
-	const handleOrderItemDelete = () => {};
 	const handleSellerNavigate = () => {
 		navigate('/shop');
 	};
@@ -47,13 +43,11 @@ function orderItem({ orderItem }) {
 					{orderItemData.sellerName}
 				</Card.Link>
 				<span style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-					<div className='quantity-button-container'>
-						<button onClick={handleQuantityDecrease}>-</button>
-						<p className='mb-0'>{itemQuantity}</p>
-						<button onClick={handleQuantityIncrease}>+</button>
-					</div>
 					<Card.Text className='mb-0'>
-						Toplam Ürün Fiyatı: {itemQuantity * orderItem.price} ₺
+						Ürün Miktarı: {orderItem.amount} tane
+					</Card.Text>
+					<Card.Text className='mb-0'>
+						Ürün Fiyatı: {orderItem.amount * orderItem.price} ₺
 					</Card.Text>
 				</span>
 			</div>
