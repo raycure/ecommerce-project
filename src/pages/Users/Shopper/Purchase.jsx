@@ -3,22 +3,19 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
+import { useLocation } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateOrderDetails } from '../../../redux/Slices/OrderInfoSlice';
 function Purchase() {
 	//once orderTable için customerId ve orderDate
 	//sonra orderItemTable için orderId, seller_productId ve amount
-	//sonra paymentTable için methodtype, customerId ve paymentAmount
-	//paymentAmount otomatik hesaplanıp kaydedildigi için atmaya gerek yok
-	const orderData = [
-		{ productId: '', price: 20, amount: 5, sellerId: '', seller_productId: '' },
-		{ productId: '', price: 40, amount: 2, sellerId: '', seller_productId: '' },
-		{ productId: '', price: 50, amount: 8, sellerId: '', seller_productId: '' },
-	];
+	//sonra paymentTable için methodtype, customerId ve paymentTotal
+	//paymentTotal otomatik hesaplanıp kaydedildigi için atmaya gerek yok
 	const orderDate = new Date();
-	let paymentAmount = 0;
-	orderData.map((orderItem) => {
-		paymentAmount = paymentAmount + orderItem.price * orderItem.amount;
-	});
-
+	const location = useLocation();
+	const paymentTotal = location.state;
+	const dispatch = useDispatch();
+	const orderInfo = useSelector((state) => state.orderInfo);
 	const paymentMethods = [
 		//bu databaseten gelen
 		'Credit Card',
@@ -49,12 +46,20 @@ function Purchase() {
 		{ method: 'Bitcoin', logo: ['/paymentMethods/Bitcoin.png'] },
 		{ method: 'Stripe', logo: ['/paymentMethods/Stripe.png'] },
 		{ method: 'AmazonPay', logo: ['/paymentMethods/AmazonPay.png'] },
-	];
+	]; //resimler var diye burda dursun
 	const [selectedMethod, setSelectedMethod] = useState('Credit Card');
 	const handleMethodClick = (method) => {
 		setSelectedMethod(method);
 	};
-	const handlePaymentSubmit = () => {};
+	const handlePaymentSubmit = () => {
+		dispatch(
+			updateOrderDetails({
+				orderId: 12345,
+				methodtype: selectedMethod,
+				paymentamount: paymentTotal,
+			})
+		);
+	};
 	return (
 		<Card className='purchase-outer-container'>
 			<Card.Header>
@@ -62,7 +67,7 @@ function Purchase() {
 				<Card.Text>Tüm ödeme yöntemlemlerimiz güvenlidir.</Card.Text>
 			</Card.Header>
 			<Card.Body>
-				<Card.Title>Toplam Ödeme: {paymentAmount}</Card.Title>
+				<Card.Title>Toplam Ödeme: {paymentTotal}</Card.Title>
 				<Card.Text>
 					Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 				</Card.Text>

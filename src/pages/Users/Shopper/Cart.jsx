@@ -3,44 +3,24 @@ import OrderItem from '../../../components/OrderItem';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 function Cart() {
 	const navigate = useNavigate();
-	const orderData = [
-		{
-			productId: '',
-			price: 20,
-			amount: 5,
-			sellerId: '',
-			seller_productId: '',
-		},
-		{
-			productId: '',
-			price: 40,
-			amount: 2,
-			sellerId: '',
-			seller_productId: '',
-		},
-		{
-			productId: '',
-			price: 50,
-			amount: 8,
-			sellerId: '',
-			seller_productId: '',
-		},
-	];
+	const orderInfo = useSelector((state) => state.orderInfo);
+	const orderItems = orderInfo.orderItems;
 	const orderDate = new Date();
 	const userAddress = 'Çağlayan, 34403 Kağıthane/İstanbul';
-	let orderAmount = 0;
-	orderData.map((orderItem) => {
-		orderAmount = orderAmount + orderItem.price * orderItem.amount;
+	let orderTotal = 0;
+	orderItems.map((orderItem) => {
+		orderTotal = orderTotal + orderItem.price * orderItem.amount;
 	});
 	const handleCartSubmit = () => {
-		navigate('/purchase');
+		navigate('/purchase', { state: orderTotal });
 	};
 	return (
 		<section className='cart-outer-container'>
 			<div>
-				{orderData.map((orderItem, index) => (
+				{orderItems.map((orderItem, index) => (
 					<OrderItem key={index} orderItem={orderItem} />
 				))}
 			</div>
@@ -52,7 +32,7 @@ function Cart() {
 					<Card.Text>
 						Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 					</Card.Text>
-					<Card.Text>Toplam Ödeme Miktarı: {orderAmount}₺</Card.Text>
+					<Card.Text>Toplam Ödeme Miktarı: {orderTotal}₺</Card.Text>
 					<hr />
 					<Button
 						style={{ width: '100%' }}
