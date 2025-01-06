@@ -7,20 +7,29 @@ import { MdOutlineVpnKey } from 'react-icons/md';
 import './Auth.css';
 import { requestService } from '../../redux/requestService';
 import { useDispatch } from 'react-redux';
+import { selectIsLoggedIn } from '../../redux/requestSlice';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 function Register() {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [registerForm, setRegisterForm] = useState({
-		name: '',
-		surname: '',
-		password: '',
+		name: 'dsa',
+		surname: 'dsa',
+		password: 'Cantsayfs13',
 		userType: 'customer',
 	});
+	console.log('registerForm', registerForm);
 	const handleRegisterForm = (e) => {
 		setRegisterForm((prev) => ({
 			...prev,
 			[e.target.name]: e.target.value,
 		}));
 	};
+	let isLoggedIn = useSelector(selectIsLoggedIn);
+	useEffect(() => {
+		console.log('isLoggedIn', isLoggedIn);
+	}, [isLoggedIn]);
 
 	async function handleFormSubmit() {
 		const response = await dispatch(
@@ -30,7 +39,12 @@ function Register() {
 				method: 'POST',
 			})
 		);
-		console.log('response in register', response);
+		if (response.payload.status === 200) {
+			console.log('setting access token in register');
+
+			localStorage.setItem('accessToken', response.payload.data.accessToken);
+			navigate('/');
+		}
 	}
 	return (
 		<Form className='authentication-form'>

@@ -25,9 +25,10 @@ const register = async (req, res) => {
 			password: hashedPassword,
 			name,
 			surname,
-			...(address && address),
+			...(address ? { address } : {}),
 			table,
 		};
+		console.log('newuserdata', newUserData);
 		const newUser = await userService.createUserDynamic(newUserData);
 		const userId = newUser.insertId;
 
@@ -61,6 +62,7 @@ const register = async (req, res) => {
 
 		res.status(200).json({
 			accessToken: accessToken,
+			userType,
 			message: 'basariyla kayit oldunuz',
 		});
 	} catch (error) {

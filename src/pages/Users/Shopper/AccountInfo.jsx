@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -6,31 +6,63 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useUserInfo } from '../../../services/productStore';
+import { requestService } from '../../../redux/requestService';
 function AccountInfo() {
+	const {
+		data: account,
+		isLoading,
+		isError,
+		error,
+		isFetching,
+		dataUpdatedAt,
+	} = useUserInfo();
+
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
+	// const timeAgo = new Date(dataUpdatedAt).toLocaleTimeString();
+	// if (isLoading) return <div>Loading...</div>;
+	// if (isError) return <div>Error: {error.message}</div>;
+
 	const [userAccountInfo, setUserAccountInfo] = useState({
-		name: 'Cemil',
-		surname: 'Uçar',
-		address: 'Esenyurt, 34510 Esenyurt/İstanbul',
-		email: 'ezgitas@gmail.com',
-		phone: '05423981654',
-		image:
-			'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6',
+		name: '',
+		surname: '',
+		address: '',
+		email: '',
+		phone: '',
 	});
-	const userPrevData = {
-		name: 'Cemil',
-		surname: 'Uçar',
-		address: 'Esenyurt, 34510 Esenyurt/İstanbul',
-		email: 'ezgitas@gmail.com',
-		phone: '05423981654',
-		image:
-			'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6',
-	};
+	useEffect(() => {
+		if (account) {
+			const response = account.response;
+
+			setUserAccountInfo({
+				name: response?.name || '',
+				surname: response?.surname || '',
+				address: response?.address || '',
+				email: response?.email || '',
+				phone: response?.phone || '',
+			});
+			setInputFullNameValue(
+				`${response?.name || ''} ${response?.surname || ''}`.trim()
+			);
+		}
+	}, [account]);
+	useEffect(() => {
+		console.log('userAccountInfo', userAccountInfo);
+	}, [userAccountInfo]);
+
 	const [inputFullNameValue, setInputFullNameValue] = useState(
 		userAccountInfo.name + ' ' + userAccountInfo.surname
 	);
+	const userPrevData = {
+		name: '',
+		surname: '',
+		address: '',
+		email: '',
+		phone: '',
+		image: '',
+	};
 	const handleSetName = (e) => {
 		const words = inputFullNameValue.trim().split(' ');
 		const name = words.slice(0, -1).join(' ');
@@ -48,7 +80,17 @@ function AccountInfo() {
 			[e.target.name]: e.target.value,
 		}));
 	};
-	const handleUserAccountInfoUpdate = () => {};
+	const dispatch = useDispatch();
+	const handleUserAccountInfoUpdate = () => {
+		const response = dispatch(
+			requestService({
+				endpoint: '/patchUserInfo',
+				data: userAccountInfo,
+				method: 'PATCH',
+			})
+		);
+		console.log('res', response);
+	};
 	const handleUserAccountInfoDelete = () => {};
 	return (
 		<Form className='account-info-outer-con'>

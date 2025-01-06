@@ -20,7 +20,7 @@ function ProductItem({ product }) {
 			<Card.Img
 				variant='top'
 				style={{ height: '16rem', objectFit: 'scale-down' }}
-				src='https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6'
+				src={product.image}
 			/>
 			<Card.Body>
 				<Card.Title>{product.title}</Card.Title>
@@ -31,7 +31,10 @@ function ProductItem({ product }) {
 					<Card.Link
 						href='/shop' //to do hold seller Id in redux
 					>
-						{product.seller} {product.sellerVerified && <FaCircleCheck />}
+						{product.seller}{' '}
+						{product.sellerVerified && product.sellerVerified === 1 && (
+							<FaCircleCheck />
+						)}
 					</Card.Link>
 				</Row>
 				<Button

@@ -6,17 +6,19 @@ import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router';
+import { data, Link } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useProducts } from '../../../services/productStore';
+import { useEffect } from 'react';
 function Shop() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
 	const userId = userInfo.userId;
 	const [sellerInfo, setSellerInfo] = useState({
-		sellerName: 'Cem Balcı',
-		sellerId: 123,
-		sellerVerified: true,
+		sellerName: '',
+		sellerId: null,
+		sellerVerified: false,
 		sellerBanned: false,
 	});
 	const buttonConStyle = {
@@ -25,6 +27,34 @@ function Shop() {
 		margin: 'auto 1rem auto auto',
 		gap: '1rem',
 	};
+
+	const {
+		data: Data,
+		isLoading,
+		isError,
+		error,
+		isFetching,
+		dataUpdatedAt,
+	} = useProducts();
+	useEffect(() => {
+		if (Data?.mappedResults?.[0]) {
+			const { sellerVerified, seller, isSellerBanned } = Data.mappedResults[0];
+			setSellerInfo({
+				sellerName: seller || '',
+				sellerId: seller?.id || null,
+				sellerVerified: sellerVerified || false,
+				sellerBanned: isSellerBanned || false,
+			});
+		}
+	}, [Data]);
+	useEffect(() => {
+		console.log('sellerinfo', sellerInfo);
+	}, [sellerInfo]);
+
+	console.log('sellerinfo', sellerInfo);
+
+	if (!Data) return <div>No products found</div>;
+
 	return (
 		<section>
 			<Container

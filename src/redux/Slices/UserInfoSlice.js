@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	userType: 'shopper', // admin, shopper ve seller optionları var
+	userType: 'shopper',
 	userId: null,
 };
 
@@ -23,4 +23,5 @@ const UserInfo = createSlice({
 });
 
 export const { setUserType, setUserId, resetUserInfo } = UserInfo.actions;
+export const selectUserType = (state) => state.userInfo.userType;
 export default UserInfo.reducer;

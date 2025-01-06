@@ -15,29 +15,45 @@ import Cart from './pages/Users/Shopper/Cart';
 import Purchase from './pages/Users/Shopper/Purchase';
 import { Provider } from 'react-redux';
 import store from './redux/store.js';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useProducts } from './services/productStore.js';
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 3 * 1000,
+			cacheTime: 5 * 60 * 1000, // 5 minutes
+			retry: 1,
+		},
+	},
+});
 
 function App() {
 	return (
 		<>
 			<Provider store={store}>
-				<BrowserRouter>
-					<Routes>
-						<Route path='/' element={<Layout />}>
-							<Route index element={<Main />} />
-							<Route path='admin-controls' element={<AdminControls />} />
-							<Route path='item-info' element={<ItemInfo />} />
-							<Route path='login' element={<Login />} />
-							<Route path='register' element={<Register />} />
-							<Route path='shop' element={<Shop />} />
-							<Route path='add-product' element={<AddItem />} />
-							<Route path='account' element={<AccountInfo />} />
-							<Route path='purchase' element={<Purchase />} />
-							<Route path='cart' element={<Cart />} />
-							<Route path='contact' element={<Contact />} />
-						</Route>
-						<Route path='/*' element={<Error />} />
-					</Routes>
-				</BrowserRouter>
+				<QueryClientProvider client={queryClient}>
+					<ReactQueryDevtools initialIsOpen={false} />
+					<BrowserRouter>
+						<Routes>
+							<Route path='/' element={<Layout />}>
+								<Route index element={<Main />} />
+								<Route path='admin-controls' element={<AdminControls />} />
+								<Route path='item-info' element={<ItemInfo />} />
+								<Route path='login' element={<Login />} />
+								<Route path='register' element={<Register />} />
+								<Route path='shop' element={<Shop />} />
+								<Route path='add-product' element={<AddItem />} />
+								<Route path='account' element={<AccountInfo />} />
+								<Route path='purchase' element={<Purchase />} />
+								<Route path='cart' element={<Cart />} />
+								<Route path='contact' element={<Contact />} />
+							</Route>
+							<Route path='/*' element={<Error />} />
+						</Routes>
+					</BrowserRouter>
+				</QueryClientProvider>
 			</Provider>
 		</>
 	);

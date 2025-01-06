@@ -10,6 +10,8 @@ function ItemInfo() {
 	const navigate = useNavigate();
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
+	console.log('userType', userType);
+
 	const userId = userInfo.userId;
 	const productInfo = {
 		name: 'iPhone 14',

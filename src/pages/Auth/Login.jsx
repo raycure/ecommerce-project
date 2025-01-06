@@ -8,8 +8,10 @@ import { FaUserLock } from 'react-icons/fa';
 import './Auth.css';
 import { useDispatch } from 'react-redux';
 import { requestService } from '../../redux/requestService';
+import { useNavigate } from 'react-router';
 function Login() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [loginForm, setLoginForm] = useState({
 		email: '',
 		phone: '',
@@ -21,6 +23,14 @@ function Login() {
 			[e.target.name]: e.target.value,
 		}));
 	};
+	async function handleTest() {
+		const response = await dispatch(
+			requestService({
+				endpoint: '/test',
+				method: 'POST',
+			})
+		);
+	}
 	async function handleFormSubmit() {
 		const response = await dispatch(
 			requestService({
@@ -29,63 +39,75 @@ function Login() {
 				method: 'POST',
 			})
 		);
-		console.log('response in register', response);
+		if (response.payload.status === 200) {
+			localStorage.setItem('accessToken', response.payload.data.accessToken);
+			navigate('/');
+		}
 	}
 	return (
-		<Form className='authentication-form login-form'>
-			<span style={{ display: 'flex' }}>
-				<FaUserLock style={{ fontSize: '6rem', margin: '0 auto 1.5rem' }} />
-			</span>
-			<FloatingLabel
-				controlId='floatingInput'
-				label='Email adresi'
-				className='mb-3'
-			>
-				<Form.Control
-					required
-					onChange={handleLoginForm}
-					name='email'
-					type='email'
-					placeholder='name@example.com'
-				/>
-			</FloatingLabel>
-			<FloatingLabel
-				controlId='floatingInput'
-				label='Telefon Numarası'
-				className='mb-3'
-			>
-				<Form.Control
-					required
-					onChange={handleLoginForm}
-					name='phone'
-					type='number'
-					placeholder='05055034455'
-				/>
-			</FloatingLabel>
-			<InputGroup className='mb-3'>
-				<InputGroup.Text id='basic-addon1'>
-					<MdOutlineVpnKey />
-				</InputGroup.Text>
-				<FloatingLabel controlId='floatingInput' label='Şifre'>
+		<>
+			<Form className='authentication-form login-form'>
+				<span style={{ display: 'flex' }}>
+					<FaUserLock style={{ fontSize: '6rem', margin: '0 auto 1.5rem' }} />
+				</span>
+				<FloatingLabel
+					controlId='floatingInput'
+					label='Email adresi'
+					className='mb-3'
+				>
 					<Form.Control
 						required
 						onChange={handleLoginForm}
-						name='password'
-						type='text'
-						placeholder='Şifre'
+						name='email'
+						type='email'
+						placeholder='name@example.com'
 					/>
 				</FloatingLabel>
-			</InputGroup>
-			<span style={{ display: 'flex' }}>
-				<Button
-					style={{ marginInline: 'auto' }}
-					onClick={handleFormSubmit}
-					variant='outline-primary'
+				<FloatingLabel
+					controlId='floatingInput'
+					label='Telefon Numarası'
+					className='mb-3'
 				>
-					Giriş Yap
-				</Button>
-			</span>
-		</Form>
+					<Form.Control
+						required
+						onChange={handleLoginForm}
+						name='phone'
+						type='number'
+						placeholder='05055034455'
+					/>
+				</FloatingLabel>
+				<InputGroup className='mb-3'>
+					<InputGroup.Text id='basic-addon1'>
+						<MdOutlineVpnKey />
+					</InputGroup.Text>
+					<FloatingLabel controlId='floatingInput' label='Şifre'>
+						<Form.Control
+							required
+							onChange={handleLoginForm}
+							name='password'
+							type='text'
+							placeholder='Şifre'
+						/>
+					</FloatingLabel>
+				</InputGroup>
+				<span style={{ display: 'flex' }}>
+					<Button
+						style={{ marginInline: 'auto' }}
+						onClick={handleFormSubmit}
+						variant='outline-primary'
+					>
+						Giriş Yap
+					</Button>
+				</span>
+			</Form>
+			<Button
+				style={{ marginInline: 'auto' }}
+				onClick={handleTest}
+				variant='outline-primary'
+			>
+				test
+			</Button>
+		</>
 	);
 }
 export default Login;

@@ -1,28 +1,40 @@
 import pkg from 'bcryptjs';
 const { hash, compare } = pkg;
 import jwt from 'jsonwebtoken';
+import { userService } from '../../services/index.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { userService } from '../../services/index.js';
 
 const login = async (req, res) => {
 	try {
-		console.log('req.body', req.body);
 		const { email, phone, password } = req.body;
 
-		// const isMatch = await pkg.compare(password, user.password);
-		if (!isMatch) {
-			return res.status(403).json({
-				success: false,
-				result: null,
-				message: 'bilgileriniz yanlis',
-			});
-		}
+		let table = 'customertable';
+		let userIdentifaction = { phone, email, table };
+		let existingUser = await userService.findUser(userIdentifaction);
+		let idType = 'customer';
 
+		if (!existingUser) {
+			table = 'sellertable';
+			userIdentifaction = { phone, email, table };
+			existingUser = await userService.findUser(userIdentifaction);
+			idType = 'seller';
+		}
+		// todo uncomment it
+		// const isMatch = await pkg.compare(password, existingUser.password);
+		// if (!isMatch) {
+		// 	return res.status(403).json({
+		// 		success: false,
+		// 		result: null,
+		// 		message: 'bilgileriniz yanlis',
+		// 	});
+		// }
+		const idName = `${idType}Id`;
+		const userId = existingUser[idName];
 		const accessToken = jwt.sign(
 			{
 				userId,
-				userType,
+				userType: idType,
 				email,
 				phone,
 			},
@@ -33,7 +45,7 @@ const login = async (req, res) => {
 			{
 				userId,
 				email,
-				userType,
+				userType: idType,
 				phone,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
@@ -49,6 +61,7 @@ const login = async (req, res) => {
 
 		return res.status(200).json({
 			accessToken: accessToken,
+			userType: idType,
 			message: 'basarili bir sekilde giris yaptiniz',
 		});
 	} catch (error) {
