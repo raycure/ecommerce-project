@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import Layout from './Layout/Layout';
-import Main from './pages/Main/Main';
-import Error from './pages/ErrorPage/ErrorPage';
+import Main from './pages/General/Main';
+import Error from './pages/General/ErrorPage';
 import AdminControls from './pages/Users/Admin/AdminControls';
 import ItemInfo from './pages/General/ItemInfo';
 import Contact from './pages/General/Contact';
