@@ -7,29 +7,26 @@ export const requestService =
 		({ endpoint, data = {}, method }) =>
 		async (dispatch) => {
 			try {
-				console.log('req service reached');
-
+				const queryString =
+					method === 'GET' ? `?${new URLSearchParams(data)}` : '';
 				const response = await dispatch(
 					fetchData({
 						method: method,
-						url: `${endpoint}`,
-						data: data,
+						url: `${endpoint}${queryString}`,
+						data: method === 'GET' ? undefined : data,
 					})
 				);
-				console.log('response in service header', response.payload.headers);
 
 				const isAccessTokenRefresh =
-					response.payload.headers &&
-					response.payload.headers['x-refreshed-token'];
+					response?.payload?.headers?.['x-refreshed-token'] || false;
 
 				if (isAccessTokenRefresh) {
 					console.log('refreshed');
-
 					let newAccessToken = response.payload.data.accessToken;
 					localStorage.setItem('accessToken', newAccessToken);
 				}
 
-				console.log('response in service', response);
+				// console.log('response in service', response);
 
 				if (fetchData.rejected.match(response)) {
 					throw response || 'An unknown error occurred';

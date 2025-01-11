@@ -5,7 +5,11 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateOrderDetails } from '../../../redux/Slices/OrderInfoSlice';
+import {
+	selectCartItems,
+	updateOrderDetails,
+} from '../../../redux/Slices/OrderInfoSlice';
+import { requestService } from '../../../redux/requestService';
 function Purchase() {
 	//once orderTable için customerId ve orderDate
 	//sonra orderItemTable için orderId, seller_productId ve amount
@@ -16,6 +20,14 @@ function Purchase() {
 	const paymentTotal = location.state;
 	const dispatch = useDispatch();
 	const orderInfo = useSelector((state) => state.orderInfo);
+	const orderItems = useSelector(selectCartItems).orderItems;
+	const orderData = orderItems.map((item) => ({
+		productId: item.item.productId,
+		sellerId: item.item.sellerId,
+		amount: item.amount,
+		seller_productId: item.item.seller_productId,
+	}));
+
 	const paymentMethods = [
 		//bu databaseten gelen
 		'Credit Card',
@@ -51,15 +63,22 @@ function Purchase() {
 	const handleMethodClick = (method) => {
 		setSelectedMethod(method);
 	};
-	const handlePaymentSubmit = () => {
+	async function handlePaymentSubmit() {
 		dispatch(
-			updateOrderDetails({
-				orderId: 12345,
-				methodtype: selectedMethod,
-				paymentamount: paymentTotal,
+			requestService({
+				method: 'POST',
+				endpoint: '/crud/purchase',
+				data: { orderData, selectedMethod },
 			})
 		);
-	};
+		// dispatch(
+		// 	updateOrderDetails({
+		// 		orderId: 12345,
+		// 		methodtype: selectedMethod,
+		// 		paymentamount: paymentTotal,
+		// 	})
+		// );
+	}
 	return (
 		<Card className='purchase-outer-container'>
 			<Card.Header>

@@ -23,15 +23,10 @@ const serializeHeaders = (headers) => {
 
 async function setupAxiosDefaults() {
 	const accesstoken = localStorage.getItem('accessToken');
-	console.log('typeof accesstoken:', typeof accesstoken);
-	console.log('Is null?:', accesstoken === null);
-	console.log('Is undefined?:', accesstoken === undefined);
 	if (accesstoken !== 'undefined') {
-		// console.log('the token thats in the header', accesstoken);
-		console.log('access token SETTING HEADER');
 		axios.defaults.headers.common['Authorization'] = `Bearer ${accesstoken}`;
 	} else {
-		console.log('accestoken silinmis');
+		// console.log('accestoken silinmis');
 		// delete axios.defaults.headers.common['Authorization'];
 	}
 }
@@ -45,11 +40,13 @@ export const fetchData = createAsyncThunk(
 			const response = await axios({
 				url,
 				data,
+				params: method === 'GET' ? data : undefined,
 				method,
 			});
-			console.log('response in slice', response);
+			// console.log('response in slice', response);
 
 			if (url.includes('/login') || url.includes('/register')) {
+				console.log('setting user type', response.data.userType);
 				dispatch(setUserType(response.data.userType));
 			}
 
@@ -57,14 +54,20 @@ export const fetchData = createAsyncThunk(
 				data: response.data,
 				status: response.status,
 				endpoint: url,
-				headers: serializeHeaders(response.headers),
+				headers:
+					response.headers !== undefined
+						? serializeHeaders(response.headers)
+						: null,
 			};
 		} catch (error) {
 			console.log('error in slice', error);
 			const responseData = {
 				data: error.response?.data,
 				status: error.response?.status,
-				headers: serializeHeaders(error.response.headers),
+				headers:
+					error.response?.headers !== undefined
+						? serializeHeaders(error.response.headers)
+						: null,
 			};
 			return rejectWithValue(responseData);
 		}
@@ -99,6 +102,8 @@ const requestSlice = createSlice({
 				}
 			})
 			.addCase(fetchData.rejected, (state, action) => {
+				console.log('rejected');
+
 				state.status = 'failed';
 				state.isLoading = false;
 				state.isSuccess = false;

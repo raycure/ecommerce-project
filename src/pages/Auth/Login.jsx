@@ -26,7 +26,7 @@ function Login() {
 	async function handleTest() {
 		const response = await dispatch(
 			requestService({
-				endpoint: '/test',
+				endpoint: '/user/login',
 				method: 'POST',
 			})
 		);

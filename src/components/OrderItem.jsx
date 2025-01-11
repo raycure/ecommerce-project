@@ -5,18 +5,9 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { addOrderItem, removeOrderItem } from '../redux/Slices/OrderInfoSlice';
-function orderItem({ orderItem }) {
+function orderItem({ orderData }) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const orderItemData = {
-		image:
-			'https://hips.hearstapps.com/hmg-prod/images/shrek-forever-after-1587549453.jpg?crop=0.676xw:0.901xh;0.0969xw,0&resize=640:*',
-		productName: 'Iphone 14',
-		productDescription:
-			"Apple'ın en son akıllı telefonu, gelişmiş özelliklerle.",
-		sellerName: 'Camil Boyundur',
-		stock: 11,
-	};
 	const handleOrderItemDelete = () => {
 		dispatch(
 			removeOrderItem({
@@ -24,6 +15,9 @@ function orderItem({ orderItem }) {
 			})
 		);
 	};
+
+	console.log('orderData', orderData);
+
 	const handleSellerNavigate = () => {
 		navigate('/shop');
 	};
@@ -31,23 +25,19 @@ function orderItem({ orderItem }) {
 		<section className='cart-order-item-outer-container'>
 			<Image
 				style={{ width: '8rem', height: '8rem', objectFit: 'scale-down' }}
-				src={orderItemData.image}
+				src={orderData?.image}
 				rounded
 			/>
 			<div className='cart-order-item-info'>
-				<Card.Title>{orderItemData.productName}</Card.Title>
-				<Card.Text className='mb-0'>
-					{orderItemData.productDescription}
-				</Card.Text>
-				<Card.Link onClick={handleSellerNavigate}>
-					{orderItemData.sellerName}
-				</Card.Link>
+				<Card.Title>{orderData?.title}</Card.Title>
+				<Card.Text className='mb-0'>{orderData.description}</Card.Text>
+				<Card.Link onClick={handleSellerNavigate}>{orderData.seller}</Card.Link>
 				<span style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
 					<Card.Text className='mb-0'>
-						Ürün Miktarı: {orderItem.amount} tane
+						Ürün Miktarı: {orderData.amount} tane
 					</Card.Text>
 					<Card.Text className='mb-0'>
-						Ürün Fiyatı: {orderItem.amount * orderItem.price} ₺
+						Ürün Fiyatı: {orderData.price} ₺
 					</Card.Text>
 				</span>
 			</div>

@@ -1,15 +1,15 @@
 import { pool } from '../config/db.js';
-import jwt from 'jsonwebtoken';
+import { userService } from '../services/index.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { userService } from '../services/index.js';
 
-const fetchSellerProducts = async (req, res) => {
+const fetchProductInfo = async (req, res) => {
 	try {
-		const accessToken = req.accessToken;
-		const decoded = jwt.decode(accessToken, process.env.ACCESS_TOKEN_SECRET);
-		const userId = decoded?.userType === 'seller' ? decoded.userId : null;
-		const sellerId = req.query.sellerId || null || userId;
+		const { productId, sellerId } = req.query;
+
+		console.log('productId', productId);
+		console.log('sellerId', sellerId);
+
 		let tables = [
 			{ name: 'seller_producttable', alias: 'sp' },
 			{ name: 'sellertable', alias: 's' },
@@ -27,15 +27,14 @@ const fetchSellerProducts = async (req, res) => {
 			'p.category',
 			'p.brand',
 			'p.image',
-			's.banned',
-			's.image as sellerImage',
-			's.sellerId',
 			'p.productId',
 			's.name as sellerName',
 			's.surname as sellerSurname',
 			's.verified',
+			's.sellerId',
+			'seller_productId',
 		];
-		let whereConditions = ['sp.sellerId'];
+		let whereConditions = ['sp.sellerId', 'sp.productId'];
 
 		const result = await userService.buildSubquery(
 			'',
@@ -44,7 +43,7 @@ const fetchSellerProducts = async (req, res) => {
 			whereConditions,
 			joinConditions
 		);
-		// console.log('result', result);
+		console.log('result', result);
 
 		tables = [
 			{ name: 'categorytable', alias: 'c' },
@@ -63,56 +62,60 @@ const fetchSellerProducts = async (req, res) => {
 			{},
 			result
 		);
-		// console.log('finalQuery', finalQuery);
+		const [rows] = await pool.query(finalQuery, [sellerId, productId]);
+		console.log('rows', rows);
 
-		const [rows] = await pool.query(finalQuery, [sellerId]);
-		console.log('rows ', rows);
 		const mappedResults = rows.map((item) => {
 			const {
 				stock,
 				price,
-				sellerImage,
 				verified,
 				sellerName,
 				sellerSurname,
 				categoryName,
 				brandName,
 				prodName,
-				banned,
+				brand,
+				category,
 				image,
 				productId,
+				description,
 				sellerId,
+				seller_productId,
 			} = item;
 
 			return {
 				stock,
 				price,
 				sellerVerified: verified,
-				sellerFullName: sellerName + ' ' + sellerSurname,
-				sellerImage,
+				seller: sellerName + ' ' + sellerSurname,
 				sellerSurname,
 				categoryName,
-				isSellerBanned: banned,
+				sellerId,
 				brand: brandName,
+				seller_productId,
+				brandIndex: brand,
+				categoryIndex: category,
 				title: prodName,
 				productId,
 				image,
-				sellerId,
+				description,
 			};
 		});
+
+		console.log('mappedResults', mappedResults);
+
 		return res.status(200).json({
 			mappedResults,
 			accessToken: req.accessToken,
 		});
 	} catch (error) {
-		console.log('error', error);
-
+		console.error('Error in testController:', error);
 		return res.status(500).json({
 			success: false,
 			message: 'Internal server error',
-			error: process.env.NODE_ENV === 'development' ? error.message : undefined,
 		});
 	}
 };
 
-export default fetchSellerProducts;
+export default fetchProductInfo;

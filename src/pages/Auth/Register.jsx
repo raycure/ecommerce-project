@@ -41,7 +41,6 @@ function Register() {
 		);
 		if (response.payload.status === 200) {
 			console.log('setting access token in register');
-
 			localStorage.setItem('accessToken', response.payload.data.accessToken);
 			navigate('/');
 		}

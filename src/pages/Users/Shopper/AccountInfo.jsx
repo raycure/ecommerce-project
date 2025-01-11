@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUserInfo } from '../../../services/productStore';
 import { requestService } from '../../../redux/requestService';
 function AccountInfo() {
+	const url = '/crud/fetchUserInfo';
 	const {
 		data: account,
 		isLoading,
@@ -17,7 +18,7 @@ function AccountInfo() {
 		error,
 		isFetching,
 		dataUpdatedAt,
-	} = useUserInfo();
+	} = useUserInfo(url);
 
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
@@ -81,10 +82,11 @@ function AccountInfo() {
 		}));
 	};
 	const dispatch = useDispatch();
-	const handleUserAccountInfoUpdate = () => {
+	const handleUserAccountInfoUpdate = (e) => {
+		e.preventDefault();
 		const response = dispatch(
 			requestService({
-				endpoint: '/patchUserInfo',
+				endpoint: '/crud/patchUserInfo',
 				data: userAccountInfo,
 				method: 'PATCH',
 			})
@@ -214,7 +216,9 @@ function AccountInfo() {
 				<Button
 					variant='primary'
 					type='submit'
-					onClick={handleUserAccountInfoUpdate}
+					onClick={(e) => {
+						handleUserAccountInfoUpdate(e);
+					}}
 				>
 					Değişiklikleri Kaydet
 				</Button>

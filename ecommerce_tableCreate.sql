@@ -146,6 +146,7 @@ CREATE TABLE sellertable(
     email varchar(50),
     verified boolean DEFAULT false,
     banned boolean DEFAULT false,
+    image TEXT,
     `password` varchar(60) not null,
     PRIMARY KEY (sellerId)
 );
@@ -159,18 +160,19 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
-INSERT INTO sellertable (`name`, surname, phone, email, verified, banned, `password`) 
+INSERT INTO sellertable (`name`, surname, phone, email, verified, banned, `password`, image) 
 VALUES 
-("Cem", "Balcı", "05321345678", "cembalcı@yahoo.com", TRUE, FALSE, "balcicem"),
-("Yasemin", "Güven", "05523456790", "yaseminguven@gmail.com", FALSE, FALSE, "guvenyasemin"),
-("Orhan", "Akkoyun", "05438765432", "orhanakkoyun@gmail.com", FALSE, TRUE, "akkoyunorhan"),
-("Fatma", "Görmez", "05376543210", "fatmagormez@gmail.com", FALSE, FALSE, "gormezfatma"),
-("Ceyda", "Kurtuluş", "05410987654", "ceydakurtulus@gmail.com", TRUE, FALSE, "kurtulusceyda"),
-("Savaş", "Öztürk", "05324569871", "savasozturk@gmail.com", FALSE, FALSE, "ozturksavas"),
-("Emine", "Tanrıverdi", "05438765421", "eminetanrıverdi@gmail.com", TRUE, FALSE, "tanrıverdiemine"),
-("Can", "Duru", "05532345678", "canduru@yahoo.com", FALSE, FALSE, "duru123"),
-("Serkan", "Taş", "05465478945", "serkantas@gmail.com", TRUE, FALSE, "tasserkan"),
-("Hale", "Uygur", "05325678965", "haleuygur@hotmail.com", FALSE, FALSE, "uyguruhale");
+("Cem", "Balcı", "05321345678", "cembalcı@yahoo.com", TRUE, FALSE, "balcicem", "https://www.looper.com/img/gallery/the-hidden-meaning-behind-walter-whites-pork-pie-hat-in-breaking-bad/intro-1599848228.jpg"),
+("Yasemin", "Güven", "05523456790", "yaseminguven@gmail.com", FALSE, FALSE, "guvenyasemin", "https://cdn.legit.ng/images/1120/70ed79ab8e577c76.jpeg?v=1"),
+("Orhan", "Akkoyun", "05438765432", "orhanakkoyun@gmail.com", FALSE, TRUE, "akkoyunorhan", "https://i.pinimg.com/736x/31/68/a5/3168a50fa7626b2150c7bffde6ce5f96.jpg"),
+("Emine", "Görmez", "05376543210", "eminegormez@gmail.com", FALSE, FALSE, "gormezemine", "https://www.svg.com/img/gallery/meet-markipliers-girlfriend-amy-peebles-nelson/intro-1642102298.jpg"),
+("Ceyda", "Kurtuluş", "05410987654", "ceydakurtulus@gmail.com", TRUE, FALSE, "kurtulusceyda", "https://variety.com/wp-content/uploads/2023/06/GettyImages-1492319722.jpg?w=1024"),
+("Savaş", "Öztürk", "05324569871", "savasozturk@gmail.com", FALSE, FALSE, "ozturksavas", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTx8engYay3bqugowUeTYH0g6glquP5Luv_g&s"),
+("Emine", "Tanrıverdi", "05438765421", "eminetanrıverdi@gmail.com", TRUE, FALSE, "tanrıverdiemine", "https://ntvb.tmsimg.com/assets/assets/1471_v9_bb.jpg"),
+("Can", "Duru", "05532345678", "canduru@yahoo.com", FALSE, FALSE, "duru123", "https://static.wikia.nocookie.net/tvdatabase/images/9/9b/Will_Graham.jpg/revision/latest?cb=20161213135112"),
+("Serkan", "Taş", "05465478945", "serkantas@gmail.com", TRUE, FALSE, "tasserkan", "https://images.alphacoders.com/568/568434.jpg"),
+("Hale", "Uygur", "05325678965", "haleuygur@hotmail.com", FALSE, FALSE, "uyguruhale", "https://static1.srcdn.com/wordpress/wp-content/uploads/2022/08/Nadja-from-What-We-Do-in-the-Shadows-2.jpg");
+
 
 CREATE TABLE categorytable(
 	categoryId int AUTO_INCREMENT NOT null,
@@ -418,7 +420,8 @@ VALUES
 ("Mango Şort", "Mango'nun rahat ve şık şortları, yaz aylarında mükemmel bir seçim.", 2, 19, "https://productimages.hepsiburada.net/s/777/300-400/110000679937452.jpg/format:webp");
 
 CREATE TABLE seller_producttable(
-	seller_productId int AUTO_INCREMENT NOT null,
+	-- seller_productId int AUTO_INCREMENT NOT null,
+	seller_productId int AUTO_INCREMENT,
     sellerId int NOT null,
     productId int NOT null,
     stock int not null,
@@ -479,6 +482,17 @@ VALUES
 (10, 8, 29, 250.00),
 (10, 9, 24, 159.99),
 (10, 10, 22, 599.95);
+-- DELIMITER $$ -- for to reserve orderItem when a product get removed by admin or the seller
+
+-- CREATE TRIGGER before_seller_product_delete
+-- BEFORE DELETE ON seller_producttable
+-- FOR EACH ROW
+-- BEGIN
+--     UPDATE orderitemtable 
+--     SET seller_productId = NULL 
+--     WHERE seller_productId = OLD.seller_productId;
+-- END $$
+-- DELIMITER ;
 CREATE TABLE ordertable(
 	orderId int AUTO_INCREMENT NOT null,
     customerId int NOT null,

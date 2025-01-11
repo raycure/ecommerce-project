@@ -7,17 +7,22 @@ import Card from 'react-bootstrap/Card';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Button from 'react-bootstrap/Button';
 import { data, Link } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useProducts } from '../../../services/productStore';
 import { useEffect } from 'react';
 import { selectUserType } from '../../../redux/Slices/UserInfoSlice';
 import { useSearchParams } from 'react-router';
-import { requestService } from '../../../redux/requestService';
 function Shop() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = useSelector(selectUserType);
 	const userId = userInfo.userId;
+	const [sellerInfo, setSellerInfo] = useState({
+		sellerName: '',
+		sellerId: null, // this stays null
+		sellerVerified: false,
+		sellerBanned: false,
+	});
 	const buttonConStyle = {
 		display: 'flex',
 		height: 'max-content',
@@ -25,36 +30,10 @@ function Shop() {
 		gap: '1rem',
 	};
 
-	const dispatch = useDispatch();
-
+	async function updateSeller() {}
 	const [searchParams] = useSearchParams();
 	const sellerId = searchParams.get('sellerId');
-	async function updateSeller(updateType) {
-		try {
-			console.log('updateType', updateType);
-			const response = dispatch(
-				requestService({
-					method: 'POST',
-					endpoint: '/crud/updateSeller',
-					data: { sellerId, updateType },
-				})
-			);
-		} catch (error) {
-			console.log('err', error);
-		}
-	}
-
-	const {
-		data: Data,
-		isLoading,
-		isError,
-		error,
-		isFetching,
-		dataUpdatedAt,
-	} = useProducts({ sellerId });
-
-	const sellerInfo = Data?.mappedResults[0];
-	console.log('sellerInfo', sellerInfo);
+	console.log('sellerId in shop', sellerId);
 	return (
 		<section>
 			<Container
@@ -68,7 +47,7 @@ function Shop() {
 			>
 				<Image
 					style={{ width: '7rem', height: '7rem', objectFit: 'cover' }}
-					src={sellerInfo?.sellerImage}
+					src='https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQg_Lj-AwA3TKS-FSwZ8c8V0zDIA4cnGrMGz0tGfAzakmcYhWr6ndm6EXpSrYYXCprXW9d6'
 					roundedCircle
 				/>
 				<div
@@ -79,20 +58,21 @@ function Shop() {
 					}}
 				>
 					<Card.Title>
-						{sellerInfo?.sellerFullName}{' '}
 						{[
-							sellerInfo?.sellerVerified === 1 && (
+							sellerInfo.sellerName,
+							' ',
+							sellerInfo.sellerVerified && (
 								<FaCircleCheck color='deepskyblue' />
 							),
 						]}
 					</Card.Title>
 					{userType !== 'seller' ? (
-						sellerInfo?.sellerVerified && !sellerInfo.isSellerBanned ? (
+						sellerInfo.sellerVerified ? (
 							<Card.Text>
 								Bu doğrulanmış bir satıcıdır, alışveriş yaparken gönül
 								rahatlığıyla devam edebilirsiniz.
 							</Card.Text>
-						) : !sellerInfo?.sellerVerified ? (
+						) : !sellerInfo.sellerBanned ? (
 							<Card.Text>
 								Bu satıcı henüz doğrulanamamıştır, doğrulanmamış satıcılardan
 								alışveriş yaparken dikkatli olunuz.
@@ -103,7 +83,7 @@ function Shop() {
 								yapamazsınız.
 							</Card.Text>
 						)
-					) : userType === 'seller' && sellerInfo?.sellerId ? (
+					) : userType === 'seller' && userId === sellerInfo.sellerId ? (
 						<Card.Text>
 							Bu sizin dükkanınız, eğer bilgilerinizde bir değişiklik yapmak
 							istiyorsanız <Link to='/account'>Hesabım</Link> linkini
@@ -122,20 +102,10 @@ function Shop() {
 				) : (
 					userType === 'admin' && (
 						<div style={buttonConStyle}>
-							<Button
-								variant='success'
-								onClick={() => {
-									updateSeller('verified');
-								}}
-							>
+							<Button variant='success' onClick={updateSeller}>
 								Doğrula
 							</Button>
-							<Button
-								variant='danger'
-								onClick={() => {
-									updateSeller('banned');
-								}}
-							>
+							<Button variant='danger' onClick={updateSeller}>
 								Satış Yasağı
 							</Button>
 						</div>
@@ -143,13 +113,19 @@ function Shop() {
 				)}
 			</Container>
 
-			<section>
-				<CategoriesBar
-					selectedCategory={selectedCategory}
-					setSelectedCategory={setSelectedCategory}
-				/>
-				<ProductList Data={Data} selectedCategory={selectedCategory} />
-			</section>
+			{!sellerInfo.sellerBanned && (
+				<section>
+					<CategoriesBar
+						selectedCategory={selectedCategory}
+						setSelectedCategory={setSelectedCategory}
+					/>
+					<ProductList
+						sellerId={sellerInfo.sellerName}
+						test={sellerId}
+						selectedCategory={selectedCategory}
+					/>
+				</section>
+			)}
 		</section>
 	);
 }

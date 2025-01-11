@@ -8,17 +8,28 @@ dotenv.config();
 const login = async (req, res) => {
 	try {
 		const { email, phone, password } = req.body;
+		console.log('login reached');
 
 		let table = 'customertable';
 		let userIdentifaction = { phone, email, table };
-		let existingUser = await userService.findUser(userIdentifaction);
+		let existingUser = await userService.findData(userIdentifaction);
 		let idType = 'customer';
 
+		console.log('the user is a seller');
+
 		if (!existingUser) {
+			console.log('the user is not customer');
+
 			table = 'sellertable';
 			userIdentifaction = { phone, email, table };
-			existingUser = await userService.findUser(userIdentifaction);
+			existingUser = await userService.findData(userIdentifaction);
 			idType = 'seller';
+			if (!existingUser) {
+				table = 'admintable';
+				userIdentifaction = { phone, email, table };
+				existingUser = await userService.findData(userIdentifaction);
+				idType = 'admin';
+			}
 		}
 		// todo uncomment it
 		// const isMatch = await pkg.compare(password, existingUser.password);

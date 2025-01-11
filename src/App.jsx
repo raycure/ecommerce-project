@@ -15,9 +15,9 @@ import Cart from './pages/Users/Shopper/Cart';
 import Purchase from './pages/Users/Shopper/Purchase';
 import { Provider } from 'react-redux';
 import store from './redux/store.js';
+import Orders from './pages/General/Orders.jsx';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useProducts } from './services/productStore.js';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -46,6 +46,7 @@ function App() {
 								<Route path='shop' element={<Shop />} />
 								<Route path='add-product' element={<AddItem />} />
 								<Route path='account' element={<AccountInfo />} />
+								<Route path='siparislerim' element={<Orders />} />
 								<Route path='purchase' element={<Purchase />} />
 								<Route path='cart' element={<Cart />} />
 								<Route path='contact' element={<Contact />} />

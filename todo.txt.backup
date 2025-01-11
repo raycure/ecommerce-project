@@ -1,0 +1,57 @@
+mysql password
+mysql -u root -p
+Cantsayfs13!
+
+GRANT ALL PRIVILEGES ON *.* TO 'emreyildirim'@'localhost' IDENTIFIED BY Cantsayfs13!;
+FLUSH PRIVILEGES;
+CREATE USER 'emreyildirim'@'localhost' IDENTIFIED BY 'Cantsayfs13';
+
+DROP DATABASE if exists moon;
+CREATE DATABASE moon;
+USE moon;
+
+SELECT User, Host FROM mysql.user WHERE User = 'emreyildirim';
+sqlCopyDROP USER 'emreyildirim'@'localhost';
+sqlCopyCREATE USER 'emreyildirim'@'localhost' IDENTIFIED BY 'Cantsayfs13!';
+sqlCopyGRANT ALL PRIVILEGES ON *.* TO 'emreyildirim'@'localhost';
+FLUSH PRIVILEGES;
+
+todo 
+
+customer
+
+in process
+- alışveriş yapabilir
+
+Cantsayfs13
+12312333123
+13garbomail@gmail.com
+
+seller
+cembalcı@yahoo.com
+05321345678
+balcicem
+
+seller
+yaseminguven@gmail.com 
+05523456790
+guvenyasemin
+
+
+customer 
+merveaslan@gmail.com
+05324757384
+merveaslanpass
+
+
+orhanakkoyun@gmail.com
+05438765432
+akkoyunorhan
+
+ADMIN
+alituran@gmail.com
+05323456789
+turanali
+
+SELECT * FROM sellertable;
+SELECT * FROM seller_producttable;

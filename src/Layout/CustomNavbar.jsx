@@ -37,6 +37,7 @@ function CustomNavbar() {
 					/>
 				</Navbar.Brand>
 				<Nav className='me-auto'>
+					<p>{userType}</p>
 					<Nav.Link href='/'>Ana Sayfa</Nav.Link>
 					{userType === 'seller' && <Nav.Link href='/shop'>Dükkanım</Nav.Link>}
 					{userType !== 'admin' && (
@@ -60,6 +61,9 @@ function CustomNavbar() {
 							<>
 								<NavDropdown.Item href='/login'>Giriş Yap</NavDropdown.Item>
 								<NavDropdown.Item href='/register'>Kaydol</NavDropdown.Item>
+								<NavDropdown.Item href='/siparislerim'>
+									siparislerim
+								</NavDropdown.Item>
 							</>
 						)}
 					</NavDropdown>

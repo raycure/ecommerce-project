@@ -5,29 +5,47 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { addOrderItem } from '../../redux/Slices/OrderInfoSlice';
+import { selectUserType } from '../../redux/Slices/UserInfoSlice';
+import { useSearchParams } from 'react-router-dom';
+import { useUserInfo } from '../../services/productStore';
+import AddItem from '../Users/Seller/AddItem';
+import { requestService } from '../../redux/requestService';
+
 function ItemInfo() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const userInfo = useSelector((state) => state.userInfo);
-	const userType = userInfo.userType;
-	console.log('userType', userType);
+	const userType = useSelector(selectUserType);
+	const [searchParams] = useSearchParams();
+	const productId = searchParams.get('productId');
+	const sellerId = searchParams.get('sellerId');
 
-	const userId = userInfo.userId;
 	const [itemAmount, setItemAmount] = useState(1);
+	const url = '/crud/fetchProductInfo';
+	const {
+		data: Data,
+		isLoading,
+		isError,
+		error,
+		isFetching,
+		dataUpdatedAt,
+	} = useUserInfo(url, { productId, sellerId });
+	const data = Data?.mappedResults[0];
+
+	console.log('data', data);
+
 	const productInfo = {
-		name: 'iPhone 14',
-		brand: 'Apple',
-		description: "Apple'ın en son akıllı telefonu, gelişmiş özelliklerle.",
-		image:
-			'https://productimages.hepsiburada.net/s/376/960-1280/110000393677091.jpg',
-		stock: 6,
-		price: 200.0,
-		sellerId: 123,
-		productId: 12,
-		seller_productId: 1,
-	}; //bunlar değişen bilgiler değil o yuzden sadece amount stateli
+		name: '',
+		brand: '',
+		description: '',
+		image: '',
+		stock: 0,
+		price: 0,
+		sellerId: 0,
+		productId: 0,
+		seller_productId: 0,
+	};
 	const handleAmountIncrease = () => {
-		if (productInfo.stock <= itemAmount) {
+		if (data.stock <= itemAmount) {
 			return false;
 		}
 		setItemAmount((prev) => prev + 1);
@@ -38,22 +56,39 @@ function ItemInfo() {
 		}
 		setItemAmount((prev) => prev - 1);
 	};
+	const totalPrice = itemAmount * data?.price;
+
 	const handleProductSubmit = () => {
 		dispatch(
 			addOrderItem({
-				productId: productInfo.productId,
-				seller_productId: productInfo.seller_productId,
-				sellerId: productInfo.sellerId,
+				// productId: data.productId,
+				seller_productId: data.seller_productId,
+				// sellerId: productInfo.sellerId,
 				amount: itemAmount,
-				price: productInfo.price,
+				price: totalPrice,
+				item: data,
 			})
 		);
-		navigate('/cart');
+		navigate(`/cart`, { state: totalPrice });
 	};
-	const handleProductUpdate = () => {
-		navigate('/add-product');
-	};
-	const handleProductDelete = () => {};
+	async function handleProductDelete() {
+		try {
+			console.log('product id in handleProductDelete', productId);
+
+			const response = await dispatch(
+				requestService({
+					method: 'POST',
+					endpoint: '/crud/deleteProduct',
+					data: { productId },
+				})
+			);
+		} catch (error) {
+			console.log('err', error);
+		}
+	}
+
+	if (!data) return <div>No products found</div>;
+
 	return (
 		<section className='item-info-outer-con'>
 			<Image
@@ -63,16 +98,16 @@ function ItemInfo() {
 					objectFit: 'scale-down',
 					margin: 'auto',
 				}}
-				src={productInfo.image}
+				src={data?.image}
 				rounded
 			/>
 			<section style={{ display: 'grid', padding: '1rem' }}>
-				<Card.Text className='mb-0'>{productInfo.brand}</Card.Text>
-				<Card.Title className='mb-2'>{productInfo.name}</Card.Title>
-				<Card.Text>{productInfo.description}</Card.Text>
+				<Card.Text className='mb-0'>{data.brand}</Card.Text>
+				<Card.Title className='mb-2'>{data.title}</Card.Title>
+				<Card.Text>{data.description}</Card.Text>
 				<hr />
-				<Card.Title>{productInfo.price} ₺</Card.Title>
-				<Card.Text>Kalan stok {productInfo.stock}</Card.Text>
+				<Card.Title>{data.price} ₺</Card.Title>
+				<Card.Text>Kalan stok {data.stock}</Card.Text>
 
 				<Card.Text className='mb-0'>Miktar</Card.Text>
 				<div className='quantity-button-container'>
@@ -80,21 +115,11 @@ function ItemInfo() {
 					<p className='mb-0'>{itemAmount}</p>
 					<button onClick={handleAmountIncrease}>+</button>
 				</div>
-				<Card.Text className='mb-4'>
-					Toplam fiyat {itemAmount * productInfo.price} ₺
-				</Card.Text>
+				<Card.Text className='mb-4'>Toplam fiyat {totalPrice} ₺</Card.Text>
 
-				{userType === 'seller' && userId === productInfo.sellerId ? (
+				{/* {userType === 'seller' && userId === productInfo.sellerId ? ( */}
+				{userType === 'seller' ? (
 					<>
-						<Button
-							onClick={handleProductUpdate}
-							style={{ width: '100%', justifySelf: 'end' }}
-							variant='warning'
-							type='submit'
-							className='mb-1'
-						>
-							Ürünü Düzenle
-						</Button>
 						<Button
 							onClick={handleProductDelete}
 							style={{ width: '100%', justifySelf: 'end' }}
@@ -104,7 +129,7 @@ function ItemInfo() {
 							Sil
 						</Button>
 					</>
-				) : userType === 'shopper' ? (
+				) : userType === 'customer' ? (
 					<Button
 						onClick={handleProductSubmit}
 						style={{ width: '100%', justifySelf: 'end' }}
@@ -126,6 +151,13 @@ function ItemInfo() {
 					<></>
 				)}
 			</section>
+			{userType === 'seller' && (
+				<AddItem
+					buttonType='ürünü düzenele'
+					productDataProp={data}
+					productId={productId}
+				/>
+			)}
 		</section>
 	);
 }

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	userType: 'shopper',
+	userType: 'customer',
 	userId: null,
 };
 
@@ -16,7 +16,7 @@ const UserInfo = createSlice({
 			state.userId = action.payload;
 		},
 		resetUserInfo(state) {
-			state.userType = 'shopper';
+			state.userType = 'customer';
 			state.userId = null;
 		},
 	},

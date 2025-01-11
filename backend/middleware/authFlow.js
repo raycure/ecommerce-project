@@ -4,26 +4,25 @@ import jwt from 'jsonwebtoken';
 // import logout from '../controllers/auth/logout.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
-
 import { userService } from '../services/index.js';
+
 const authFlow = async (req, res, next) => {
 	try {
 		console.log('auth flow reached');
 		const refreshToken = req.cookies.jwt;
-		if (!refreshToken) {
-			console.log('no refresh token');
-			return res.status(401).json({ message: 'gecersiz yetkinlikte istek' });
-		}
 
 		let decodedToken;
 		try {
 			decodedToken = jwt.decode(refreshToken);
+			console.log('decodedToken', decodedToken);
+
 			jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 		} catch (decodeError) {
 			console.log('refreshToken verification failed');
-			return res.status(403).json({
-				message: 'oturumunuz bulunamamistir',
-			});
+			req.isAuthenticated = false;
+			req.accessToken = null;
+			req.userId = null;
+			return next();
 		}
 
 		const userId = decodedToken.userId;
@@ -32,7 +31,7 @@ const authFlow = async (req, res, next) => {
 		const idColumnName = `${userType}Id`;
 		const userIdentifiers = { table, [idColumnName]: userId };
 
-		const foundUser = await userService.findUser(userIdentifiers);
+		const foundUser = await userService.findData(userIdentifiers);
 
 		if (!foundUser) {
 			console.log('no user found');
@@ -60,6 +59,7 @@ const authFlow = async (req, res, next) => {
 		// }
 		const accessToken = authHeader?.split(' ')[1];
 		req.accessToken = accessToken;
+		req.userType = userType;
 
 		console.log('gonna verify');
 		await verifyJWT(req, verifyJwtMockResponse);

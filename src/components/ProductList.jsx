@@ -1,31 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ProductSelector from './ProductSelector';
 import ProductItem from './ProductItem';
-import {
-	useProducts,
-	fetchSellerProducts,
-	useProductsByUserType,
-} from '../services/productStore';
+import { useProducts } from '../services/productStore';
 import CustomPagination from './UI/CustomPagination';
-import { useSelector } from 'react-redux';
-import { selectUserType } from '../redux/Slices/UserInfoSlice';
-function ProductList({ selectedCategory, sellerId }) {
+import { data } from 'react-router';
+function ProductList({ selectedCategory, sellerId, Data }) {
 	const [productSelector, setProductSelector] = useState({
 		brands: [],
 		minPrice: 0,
 		maxPrice: 0,
 		showOnlyVerifiedSellers: false, //false olunca sadece verified olmayanlar değil hepsini göstermiş oluyor
 	});
-
-	const {
-		data: Data,
-		isLoading,
-		isError,
-		error,
-		isFetching,
-		dataUpdatedAt,
-	} = useProducts();
-	console.log('data in shops seller', Data);
 
 	const [paginationPageNumber, setPaginationPageNumber] = useState(1);
 	useEffect(() => {
@@ -35,6 +20,7 @@ function ProductList({ selectedCategory, sellerId }) {
 		productSelector.showVerifiedSellers,
 		productSelector.brands,
 	]);
+	console.log('Data', Data);
 
 	if (!Data) return <div>No products found</div>;
 

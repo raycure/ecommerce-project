@@ -3,19 +3,19 @@ import * as dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 dotenv.config();
 
-const testUserController = async (req, res) => {
+const fetchUserInfo = async (req, res) => {
 	try {
 		const accessToken = req.accessToken;
 		const decoded = jwt.decode(accessToken, process.env.ACCESS_TOKEN_SECRET);
 		const { phone, email, userType } = decoded;
-		console.log('decoded', decoded);
+		// console.log('decoded', decoded);
 
 		const table = await userService.getTheTableNameByUserType(userType);
-		console.log('table', table);
+		// console.log('table', table);
 		const userIdentifaction = { phone, email, table };
 
-		const response = await userService.findUser(userIdentifaction);
-		console.log('res', response);
+		const response = await userService.findData(userIdentifaction);
+		// console.log('res', response);
 
 		return res.status(200).json({
 			response,
@@ -42,8 +42,8 @@ const updateUserController = async (req, res) => {
 		console.log('req.body,', req.body);
 
 		const table = await userService.getTheTableNameByUserType(userType);
-		const userIdentification = { email: oldEmail, phone: oldPhone, table };
-		console.log('userIdentification', userIdentification);
+		const identificationData = { email: oldEmail, phone: oldPhone, table };
+		console.log('identificationData', identificationData);
 
 		const { name, surname, address, phone, email } = req.body;
 
@@ -56,8 +56,8 @@ const updateUserController = async (req, res) => {
 		};
 		console.log('req.body ', req.body);
 
-		const updatedUser = await userService.updateUser(
-			userIdentification,
+		const updatedUser = await userService.updateData(
+			identificationData,
 			updateData
 		);
 
@@ -97,4 +97,4 @@ const updateUserController = async (req, res) => {
 	}
 };
 
-export { updateUserController, testUserController };
+export { updateUserController, fetchUserInfo };

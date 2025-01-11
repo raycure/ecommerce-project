@@ -11,7 +11,7 @@ const register = async (req, res) => {
 			req.body;
 		const table = await userService.getTheTableNameByUserType(userType);
 		const userIdentifaction = { phone, email, table };
-		const existingUser = await userService.findUser(userIdentifaction);
+		const existingUser = await userService.findData(userIdentifaction);
 		if (existingUser) {
 			return res.status(409).json({
 				message:
@@ -29,7 +29,7 @@ const register = async (req, res) => {
 			table,
 		};
 		console.log('newuserdata', newUserData);
-		const newUser = await userService.createUserDynamic(newUserData);
+		const newUser = await userService.insertData(newUserData);
 		const userId = newUser.insertId;
 
 		const accessToken = jwt.sign(

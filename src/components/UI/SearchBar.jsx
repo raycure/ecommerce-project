@@ -24,7 +24,7 @@ function SearchBar() {
 				});
 		};
 		fetchSearchSuggestions();
-		console.log(suggestions.length);
+		// console.log(suggestions.length);
 	}, [searchValue]);
 	const handleProductPick = () => {
 		navigate('/item-info');

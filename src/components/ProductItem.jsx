@@ -6,13 +6,19 @@ import { FaCircleCheck } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 import { IoTrashOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
+import { selectUserType } from '../redux/Slices/UserInfoSlice';
 function ProductItem({ product }) {
-	const userInfo = useSelector((state) => state.userInfo);
-	const userType = userInfo.userType;
+	const userType = useSelector(selectUserType);
 	const navigate = useNavigate();
-	//product id de alınır
 	const handleProductSelect = () => {
-		navigate('/item-info');
+		navigate(
+			`/item-info/?productId=${product.productId}&sellerId=${product.sellerId}`
+		);
+	};
+	const handleSellerSelect = () => {
+		navigate(
+			`/shop/?productId=${product.productId}&sellerId=${product.sellerId}`
+		);
 	};
 	const handleProductDelete = () => {};
 	return (
@@ -23,34 +29,52 @@ function ProductItem({ product }) {
 				src={product.image}
 			/>
 			<Card.Body>
-				<Card.Title>{product.title}</Card.Title>
+				<Card.Title>
+					{product.title} {userType === 'admin' && product.price + '₺'}
+				</Card.Title>
 				<Card.Subtitle className='mb-2 text-muted'>
 					{product.brand}
 				</Card.Subtitle>
-				<Row>
-					<Card.Link
-						href='/shop' //to do hold seller Id in redux
+				<Card.Subtitle className='mb-2 text-muted'>
+					{userType === 'seller' && ' ' + product.price + '₺'}
+				</Card.Subtitle>
+				{userType !== 'seller' && (
+					<Row>
+						<Card.Link onClick={handleSellerSelect}>
+							{product.sellerFullName}{' '}
+							{product.sellerVerified === 1 && <FaCircleCheck />}
+						</Card.Link>
+					</Row>
+				)}
+				{userType === 'customer' && (
+					<Button
+						className='mt-1'
+						onClick={handleProductSelect}
+						variant='primary'
+						style={{
+							width: '100%',
+						}}
 					>
-						{product.seller}{' '}
-						{product.sellerVerified && product.sellerVerified === 1 && (
-							<FaCircleCheck />
-						)}
-					</Card.Link>
-				</Row>
-				<Button
-					className='mt-1'
-					onClick={handleProductSelect}
-					variant='primary'
-					style={{
-						width: '100%',
-					}}
-				>
-					{product.price} ₺
-				</Button>
+						{product.price} ₺
+					</Button>
+				)}
+
+				{userType === 'seller' && (
+					<Button
+						className='mt-1'
+						onClick={handleProductSelect}
+						variant='primary'
+						style={{
+							width: '100%',
+						}}
+					>
+						duzenle
+					</Button>
+				)}
 				{userType === 'admin' && (
 					<Button
 						className='mt-1'
-						onClick={handleProductDelete}
+						onClick={handleProductSelect}
 						variant='danger'
 						style={{
 							width: '100%',
@@ -60,7 +84,8 @@ function ProductItem({ product }) {
 							gap: '3px',
 						}}
 					>
-						<IoTrashOutline /> Sil
+						{' '}
+						Incele
 					</Button>
 				)}
 			</Card.Body>

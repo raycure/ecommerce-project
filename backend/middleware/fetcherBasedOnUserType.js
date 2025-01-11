@@ -4,22 +4,35 @@ import jwt from 'jsonwebtoken';
 
 const fetcherBasedOnUserType = async (req, res, next) => {
 	try {
+		if (!req.isAuthenticated) {
+			return next();
+		}
+
 		const accessToken = req.accessToken;
 		const decoded = jwt.decode(accessToken, process.env.ACCESS_TOKEN_SECRET);
 		const userType = decoded.userType;
-
-		if (userType === 'customer') {
-			const testController = (await import('../controllers/testController.js'))
-				.default;
-			return testController(req, res);
-		} else {
-			console.log('usertype is ', userType);
+		if (req.query.sellerId) {
 			const fetchSellerProducts = (
 				await import('../controllers/fetchSellerProducts.js')
 			).default;
+			console.log('req.query.sellerId triggered');
 			return fetchSellerProducts(req, res);
 		}
-		// todo add api call for admin
+		if (userType === 'seller') {
+			const fetchSellerProducts = (
+				await import('../controllers/fetchSellerProducts.js')
+			).default;
+			console.log('userType === seller triggered');
+
+			return fetchSellerProducts(req, res);
+		}
+		if (userType === 'admin') {
+			const fetchAdminAssignedProducts = (
+				await import('../controllers/fetchAdminAssignedProducts.js')
+			).default;
+			console.log('userType === admin triggered');
+			return fetchAdminAssignedProducts(req, res);
+		}
 		return next();
 	} catch (error) {
 		console.error('Fetcher middleware error:', error);
@@ -28,3 +41,7 @@ const fetcherBasedOnUserType = async (req, res, next) => {
 };
 
 export default fetcherBasedOnUserType;
+
+// const fetchProducts = (await import('../controllers/fetchProducts.js'))
+// 	.default;
+// return fetchProducts(req, res);
