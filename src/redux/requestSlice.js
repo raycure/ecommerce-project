@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { resetUserInfo, setUserType } from './Slices/UserInfoSlice.js';
+import {
+	resetUserInfo,
+	setUserId,
+	setUserType,
+} from './Slices/UserInfoSlice.js';
 import axios from '../config/axios.js';
 const initialState = {
 	isLoggedIn: false,
@@ -42,11 +46,10 @@ export const fetchData = createAsyncThunk(
 				params: method === 'GET' ? data : undefined,
 				method,
 			});
-			// console.log('response in slice', response);
 
 			if (url.includes('/login') || url.includes('/register')) {
-				console.log('setting user type', response.data.userType);
 				dispatch(setUserType(response.data.userType));
+				dispatch(setUserId(response.data.userId));
 			}
 			if (url.includes('/logout')) {
 				dispatch(resetUserInfo());

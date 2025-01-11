@@ -111,7 +111,9 @@ function ItemInfo() {
 						<p className='mb-0'>{itemAmount}</p>
 						<button onClick={handleAmountIncrease}>+</button>
 					</div>
-					<Card.Text className='mb-4'>Toplam fiyat {totalPrice} ₺</Card.Text>
+					<Card.Text className='mb-4'>
+						Toplam fiyat {totalPrice.toFixed(2)} ₺
+					</Card.Text>
 
 					{/* {userType === 'seller' && userId === productInfo.sellerId ? ( */}
 					{userType === 'seller' ? (

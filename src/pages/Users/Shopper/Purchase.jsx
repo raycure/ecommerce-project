@@ -86,7 +86,7 @@ function Purchase() {
 				<Card.Text>Tüm ödeme yöntemlemlerimiz güvenlidir.</Card.Text>
 			</Card.Header>
 			<Card.Body>
-				<Card.Title>Toplam Ödeme: {paymentTotal}</Card.Title>
+				<Card.Title>Toplam Ödeme: {paymentTotal.toFixed(2)}</Card.Title>
 				<Card.Text>
 					Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 				</Card.Text>

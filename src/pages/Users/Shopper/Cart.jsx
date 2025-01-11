@@ -38,7 +38,9 @@ function Cart() {
 					<Card.Text>
 						Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 					</Card.Text>
-					<Card.Text>Toplam Ödeme Miktarı: {allOrdersTotal}₺</Card.Text>
+					<Card.Text>
+						Toplam Ödeme Miktarı: {allOrdersTotal.toFixed(2)}₺
+					</Card.Text>
 					<hr />
 					<Button
 						style={{ width: '100%' }}
