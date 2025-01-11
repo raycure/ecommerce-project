@@ -14,7 +14,7 @@ const fetchOrders = async (req, res) => {
         FROM (
             SELECT subq.*
             FROM (
-                SELECT oi.*, o.methodtype, o.totalPrice, o.orderDate
+                SELECT oi.*, o.methodtype, o.totalPrice, o.orderDate, o.customerId
                 FROM orderitemtable oi
                 JOIN ordertable o ON oi.orderId = o.orderId
 				WHERE ${whereByUserType}
@@ -23,9 +23,8 @@ const fetchOrders = async (req, res) => {
         ) AS parent 
         JOIN producttable p ON parent.productId = p.productId
     `;
-
+		const uniqueCustomers = [];
 		const [rows] = await pool.query(query, id);
-		console.log('rows ', rows);
 		const mappedResults = rows.map((item) => {
 			const {
 				productId,
@@ -38,12 +37,17 @@ const fetchOrders = async (req, res) => {
 				amount,
 				methodType,
 				totalPrice,
+				customerId,
 				orderDate,
 			} = item;
+			if (userType === 'seller' && !uniqueCustomers.includes(customerId)) {
+				uniqueCustomers.push(customerId);
+			}
 
 			return {
 				brand,
 				orderDate,
+				customerId,
 				amount,
 				methodType,
 				totalPrice,
@@ -56,8 +60,22 @@ const fetchOrders = async (req, res) => {
 				image,
 			};
 		});
+
+		let table = 'customertable';
+		const customers =
+			userType === 'seller'
+				? await Promise.all(
+						uniqueCustomers.map(async (customerId) => {
+							const userData = { table, customerId };
+							return await userService.findData(userData);
+						})
+				  )
+				: '';
+		console.log('customer', customers);
+
 		return res.status(200).json({
 			mappedResults,
+			...customers,
 			accessToken: req.accessToken,
 		});
 	} catch (error) {
