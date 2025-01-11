@@ -11,7 +11,7 @@ function orderItem({ orderData }) {
 	const handleOrderItemDelete = () => {
 		dispatch(
 			removeOrderItem({
-				seller_productId: orderItem.seller_productId,
+				seller_productId: orderData.seller_productId,
 			})
 		);
 	};
@@ -25,19 +25,21 @@ function orderItem({ orderData }) {
 		<section className='cart-order-item-outer-container'>
 			<Image
 				style={{ width: '8rem', height: '8rem', objectFit: 'scale-down' }}
-				src={orderData?.image}
+				src={orderData.item?.image}
 				rounded
 			/>
 			<div className='cart-order-item-info'>
-				<Card.Title>{orderData?.title}</Card.Title>
-				<Card.Text className='mb-0'>{orderData.description}</Card.Text>
-				<Card.Link onClick={handleSellerNavigate}>{orderData.seller}</Card.Link>
+				<Card.Title>{orderData.item?.title}</Card.Title>
+				<Card.Text className='mb-0'>{orderData?.description}</Card.Text>
+				<Card.Link onClick={handleSellerNavigate}>
+					{orderData.item?.seller}
+				</Card.Link>
 				<span style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
 					<Card.Text className='mb-0'>
-						Ürün Miktarı: {orderData.amount} tane
+						Ürün Miktarı: {orderData?.amount} tane
 					</Card.Text>
 					<Card.Text className='mb-0'>
-						Ürün Fiyatı: {orderData.price} ₺
+						Ürün Fiyatı: {orderData.item?.price} ₺
 					</Card.Text>
 				</span>
 			</div>

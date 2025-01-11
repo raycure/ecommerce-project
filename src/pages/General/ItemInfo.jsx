@@ -33,17 +33,6 @@ function ItemInfo() {
 
 	console.log('data', data);
 
-	const productInfo = {
-		name: '',
-		brand: '',
-		description: '',
-		image: '',
-		stock: 0,
-		price: 0,
-		sellerId: 0,
-		productId: 0,
-		seller_productId: 0,
-	};
 	const handleAmountIncrease = () => {
 		if (data.stock <= itemAmount) {
 			return false;
@@ -63,9 +52,15 @@ function ItemInfo() {
 			addOrderItem({
 				// productId: data.productId,
 				seller_productId: data.seller_productId,
+				description: data.description,
 				// sellerId: productInfo.sellerId,
+				title: data.title,
 				amount: itemAmount,
+				image: data.image,
+				sellerName: data.sellerName,
+				sellerSurname: data.selleSurname,
 				price: totalPrice,
+				eachPrice: data.price,
 				item: data,
 			})
 		);

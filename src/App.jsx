@@ -46,7 +46,7 @@ function App() {
 								<Route path='shop' element={<Shop />} />
 								<Route path='add-product' element={<AddItem />} />
 								<Route path='account' element={<AccountInfo />} />
-								<Route path='siparislerim' element={<Orders />} />
+								<Route path='orders' element={<Orders />} />
 								<Route path='purchase' element={<Purchase />} />
 								<Route path='cart' element={<Cart />} />
 								<Route path='contact' element={<Contact />} />
