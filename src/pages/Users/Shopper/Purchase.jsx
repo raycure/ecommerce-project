@@ -4,12 +4,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import { useLocation } from 'react-router';
+
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	selectCartItems,
 	updateOrderDetails,
 } from '../../../redux/Slices/OrderInfoSlice';
 import { requestService } from '../../../redux/requestService';
+
 function Purchase() {
 	//once orderTable için customerId ve orderDate
 	//sonra orderItemTable için orderId, seller_productId ve amount
@@ -27,7 +29,6 @@ function Purchase() {
 		amount: item.amount,
 		seller_productId: item.item.seller_productId,
 	}));
-
 	const paymentMethods = [
 		//bu databaseten gelen
 		'Credit Card',

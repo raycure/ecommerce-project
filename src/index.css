@@ -120,3 +120,89 @@
 	gap: 0.5rem;
 	justify-content: center;
 }
+.contact-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+	font-family: Arial, sans-serif;
+	color: #333;
+	line-height: 1.8;
+}
+
+.contact-header {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.contact-header h1 {
+	font-size: 2.8rem;
+	color: #2c3e50;
+}
+
+.contact-header p {
+	font-size: 1.2rem;
+	color: #7f8c8d;
+}
+
+.contact-info {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin-bottom: 50px;
+}
+
+.info-section {
+	flex: 1;
+	min-width: 250px;
+	text-align: center;
+	margin: 15px;
+}
+
+.info-section h2 {
+	font-size: 1.6rem;
+	color: #34495e;
+	margin-bottom: 10px;
+}
+
+.info-section p {
+	font-size: 1.1rem;
+	color: #7f8c8d;
+}
+
+.info-section a {
+	color: #3498db;
+	text-decoration: none;
+}
+
+.info-section a:hover {
+	text-decoration: underline;
+}
+
+.company-story {
+	margin-bottom: 50px;
+}
+
+.company-story h2 {
+	font-size: 2rem;
+	color: #2c3e50;
+	margin-top: 20px;
+}
+
+.company-story p {
+	font-size: 1.1rem;
+	color: #7f8c8d;
+	margin-top: 10px;
+	text-align: justify;
+}
+
+.faq-section h2 {
+	font-size: 2rem;
+	color: #2c3e50;
+	margin-top: 40px;
+}
+
+.faq-section p {
+	font-size: 1.1rem;
+	color: #7f8c8d;
+	margin-bottom: 15px;
+}
