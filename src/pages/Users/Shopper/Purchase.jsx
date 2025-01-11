@@ -76,8 +76,13 @@ function Purchase() {
 		console.log('response', response);
 
 		if (response.payload.status === 200) {
-			navigate('/siparislerim');
+			navigate('/orders');
 		}
+		dispatch(
+			updateOrderDetails({
+				orderItems: [],
+			})
+		);
 	}
 	return (
 		<Card className='purchase-outer-container'>

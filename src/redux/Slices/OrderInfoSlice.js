@@ -28,10 +28,11 @@ const OrderInfo = createSlice({
 			);
 		},
 		updateOrderDetails(state, action) {
-			const { orderId, methodtype, paymentamount } = action.payload;
+			const { orderId, methodtype, paymentamount, orderItems } = action.payload;
 			if (orderId !== undefined) state.orderId = orderId;
 			if (methodtype !== undefined) state.methodtype = methodtype;
 			if (paymentamount !== undefined) state.paymentamount = paymentamount;
+			if (orderItems !== undefined) state.orderItems = orderItems;
 		},
 	},
 });

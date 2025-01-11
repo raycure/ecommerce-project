@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useNavigate } from 'react-router';
+import { useProducts } from '../../services/productStore';
 function SearchBar() {
 	const [searchValue, setSearchValue] = useState('');
 	const [suggestions, setSuggestions] = useState([]);
@@ -9,34 +10,51 @@ function SearchBar() {
 	const handleSearchPropertyUpdate = (e) => {
 		setSearchValue(e.target.value);
 	};
+	const {
+		data: Data,
+		isLoading,
+		isError,
+		error,
+		isFetching,
+		dataUpdatedAt,
+	} = useProducts();
 	useEffect(() => {
 		const fetchSearchSuggestions = () => {
-			// https://dummyjson.com/users/search?q=Jo
 			if (searchValue.trim() === '') {
 				setSuggestions([]);
 				return;
-			}
-			fetch(`https://dummyjson.com/users/search?q=${searchValue}`)
-				.then((res) => res.json())
-				.then((data) => setSuggestions(data))
-				.catch((err) => {
-					console.error(err);
+			} else {
+				const filteredSuggestions = Data?.mappedResults.filter((product) => {
+					return product.title
+						.toLowerCase()
+						.includes(searchValue.toLowerCase());
 				});
+				setSuggestions(
+					filteredSuggestions.map((product) => ({
+						title: product.title,
+						sellerId: product.sellerId,
+						productId: product.productId,
+					}))
+				);
+			}
 		};
 		fetchSearchSuggestions();
-		// console.log(suggestions.length);
 	}, [searchValue]);
-	const handleProductPick = () => {
-		navigate('/item-info');
-	};
+	console.log(suggestions);
+
 	return (
 		<Form className='d-flex'>
-			<Dropdown show={suggestions?.users?.length > 0}>
+			<Dropdown show={suggestions?.length > 0}>
 				<Dropdown.Menu style={{ width: '320px' }}>
-					{suggestions?.users?.map((user) => {
+					{suggestions?.map((product) => {
+						const handleProductPick = () => {
+							navigate(
+								`/item-info/?productId=${product.productId}&sellerId=${product.sellerId}`
+							);
+						};
 						return (
 							<Dropdown.Item onClick={handleProductPick}>
-								{user.firstName}
+								{product.title}
 							</Dropdown.Item>
 						);
 					})}
