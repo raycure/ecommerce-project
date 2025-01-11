@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
 	resetUserInfo,
 	setUserId,
+	setUser,
 	setUserType,
 } from './Slices/UserInfoSlice.js';
 import axios from '../config/axios.js';
@@ -49,7 +50,10 @@ export const fetchData = createAsyncThunk(
 
 			if (url.includes('/login') || url.includes('/register')) {
 				dispatch(setUserType(response.data.userType));
-				dispatch(setUserId(response.data.userId));
+				dispatch(setUser(response.data.existingUser));
+				if (response.data.userType === 'seller') {
+					dispatch(setUserType(response.data.userId));
+				}
 			}
 			if (url.includes('/logout')) {
 				dispatch(resetUserInfo());

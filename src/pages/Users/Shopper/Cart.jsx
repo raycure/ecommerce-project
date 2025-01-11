@@ -3,18 +3,19 @@ import OrderItem from '../../../components/OrderItem';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
-import { useSearchParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
 import { selectCartItems } from '../../../redux/Slices/OrderInfoSlice';
 function Cart() {
 	const navigate = useNavigate();
 	const orderItems = useSelector(selectCartItems).orderItems;
+	const userInfo = useSelector((state) => state.userInfo.user);
+	console.log('userInfo', userInfo);
+
 	const orderDate = new Date();
-	const userAddress = 'Çağlayan, 34403 Kağıthane/İstanbul';
-	// todo get user adress
+	const userAddress = userInfo?.address;
 	let allOrdersTotal = 0;
 
+	console.log('orderItems', orderItems);
 	orderItems.map((orderItem) => {
 		allOrdersTotal = orderItem.price + allOrdersTotal;
 	});
@@ -26,8 +27,8 @@ function Cart() {
 	return (
 		<section className='cart-outer-container'>
 			<div>
-				{orderItems.filter(Boolean).map((orderItem, index) => (
-					<OrderItem key={index} orderData={orderItem} />
+				{orderItems.map((orderItem, index) => (
+					<OrderItem key={index} orderData={orderItem.item} />
 				))}
 			</div>
 			<Card style={{ padding: '1rem 0.5rem', height: 'max-content' }}>
