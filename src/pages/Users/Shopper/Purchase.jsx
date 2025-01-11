@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import { useLocation } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateOrderDetails } from '../../../redux/Slices/OrderInfoSlice';
 function Purchase() {
 	//once orderTable için customerId ve orderDate
@@ -15,7 +15,6 @@ function Purchase() {
 	const location = useLocation();
 	const paymentTotal = location.state;
 	const dispatch = useDispatch();
-	const orderInfo = useSelector((state) => state.orderInfo);
 	const paymentMethods = [
 		//bu databaseten gelen
 		'Credit Card',
