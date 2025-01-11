@@ -95,7 +95,7 @@ class UserService {
 				`;
 
 			console.log('update query:', query);
-			values.push(valuesForWhere);
+			values.push(...valuesForWhere);
 
 			const [result] = await this.pool.query(query, values);
 			console.log('result', result);

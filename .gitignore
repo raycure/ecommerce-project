@@ -13,6 +13,7 @@ dist-ssr
 *.local
 todo.txt
 .env
+backend/.env
 
 # Editor directories and files
 .vscode/*
