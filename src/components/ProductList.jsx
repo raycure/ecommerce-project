@@ -40,7 +40,7 @@ function ProductList({ selectedCategory, sellerId, Data }) {
 		const isCategoryValid =
 			selectedCategory === null ||
 			selectedCategory === undefined ||
-			product.category === selectedCategory;
+			product.categoryName === selectedCategory;
 		const isSellerSelected =
 			sellerId === null ||
 			sellerId === undefined ||

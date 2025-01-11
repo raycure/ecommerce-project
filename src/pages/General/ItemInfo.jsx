@@ -85,36 +85,56 @@ function ItemInfo() {
 	if (!data) return <div>No products found</div>;
 
 	return (
-		<section className='item-info-outer-con'>
-			<Image
-				style={{
-					width: '24rem',
-					height: '24rem',
-					objectFit: 'scale-down',
-					margin: 'auto',
-				}}
-				src={data?.image}
-				rounded
-			/>
-			<section style={{ display: 'grid', padding: '1rem' }}>
-				<Card.Text className='mb-0'>{data.brand}</Card.Text>
-				<Card.Title className='mb-2'>{data.title}</Card.Title>
-				<Card.Text>{data.description}</Card.Text>
-				<hr />
-				<Card.Title>{data.price} ₺</Card.Title>
-				<Card.Text>Kalan stok {data.stock}</Card.Text>
+		<>
+			<section className='item-info-outer-con'>
+				<Image
+					style={{
+						width: '24rem',
+						height: '24rem',
+						objectFit: 'scale-down',
+						margin: 'auto',
+					}}
+					src={data?.image}
+					rounded
+				/>
+				<section style={{ display: 'grid', padding: '1rem' }}>
+					<Card.Text className='mb-0'>{data.brand}</Card.Text>
+					<Card.Title className='mb-2'>{data.title}</Card.Title>
+					<Card.Text>{data.description}</Card.Text>
+					<hr />
+					<Card.Title>{data.price} ₺</Card.Title>
+					<Card.Text>Kalan stok {data.stock}</Card.Text>
 
-				<Card.Text className='mb-0'>Miktar</Card.Text>
-				<div className='quantity-button-container'>
-					<button onClick={handleAmountDecrease}>-</button>
-					<p className='mb-0'>{itemAmount}</p>
-					<button onClick={handleAmountIncrease}>+</button>
-				</div>
-				<Card.Text className='mb-4'>Toplam fiyat {totalPrice} ₺</Card.Text>
+					<Card.Text className='mb-0'>Miktar</Card.Text>
+					<div className='quantity-button-container'>
+						<button onClick={handleAmountDecrease}>-</button>
+						<p className='mb-0'>{itemAmount}</p>
+						<button onClick={handleAmountIncrease}>+</button>
+					</div>
+					<Card.Text className='mb-4'>Toplam fiyat {totalPrice} ₺</Card.Text>
 
-				{/* {userType === 'seller' && userId === productInfo.sellerId ? ( */}
-				{userType === 'seller' ? (
-					<>
+					{/* {userType === 'seller' && userId === productInfo.sellerId ? ( */}
+					{userType === 'seller' ? (
+						<>
+							<Button
+								onClick={handleProductDelete}
+								style={{ width: '100%', justifySelf: 'end' }}
+								variant='danger'
+								type='submit'
+							>
+								Sil
+							</Button>
+						</>
+					) : userType === 'customer' ? (
+						<Button
+							onClick={handleProductSubmit}
+							style={{ width: '100%', justifySelf: 'end' }}
+							variant='primary'
+							type='submit'
+						>
+							Sepete Ekle
+						</Button>
+					) : userType === 'admin' ? (
 						<Button
 							onClick={handleProductDelete}
 							style={{ width: '100%', justifySelf: 'end' }}
@@ -123,28 +143,10 @@ function ItemInfo() {
 						>
 							Sil
 						</Button>
-					</>
-				) : userType === 'customer' ? (
-					<Button
-						onClick={handleProductSubmit}
-						style={{ width: '100%', justifySelf: 'end' }}
-						variant='primary'
-						type='submit'
-					>
-						Sepete Ekle
-					</Button>
-				) : userType === 'admin' ? (
-					<Button
-						onClick={handleProductDelete}
-						style={{ width: '100%', justifySelf: 'end' }}
-						variant='danger'
-						type='submit'
-					>
-						Sil
-					</Button>
-				) : (
-					<></>
-				)}
+					) : (
+						<></>
+					)}
+				</section>
 			</section>
 			{userType === 'seller' && (
 				<AddItem
@@ -153,7 +155,7 @@ function ItemInfo() {
 					productId={productId}
 				/>
 			)}
-		</section>
+		</>
 	);
 }
 export default ItemInfo;

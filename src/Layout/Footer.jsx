@@ -8,9 +8,9 @@ function Footer() {
 			<div className='footer-container'>
 				{/* Company Info Section */}
 				<div className='footer-section'>
-					<h2 className='footer-title'>Trendify</h2>
+					<h2 className='footer-title'>Moon Shop</h2>
 					<p className='footer-description'>
-						Trendify, müşterilerimize en iyi alışveriş deneyimini sunmayı
+						Moon Shop, müşterilerimize en iyi alışveriş deneyimini sunmayı
 						hedefleyen yenilikçi bir e-ticaret platformudur. Kaliteli ürünler,
 						uygun fiyatlar ve müşteri memnuniyetine odaklanarak sektörde fark
 						yaratıyoruz.
@@ -50,7 +50,7 @@ function Footer() {
 					<p className='footer-contact'>
 						<strong>Adres:</strong> Barbaros Mahallesi, İstanbul, Türkiye <br />
 						<strong>Telefon:</strong> +90 212 123 45 67 <br />
-						<strong>E-posta:</strong> info@trendify.com
+						<strong>E-posta:</strong> info@moon.com
 					</p>
 				</div>
 
@@ -96,7 +96,7 @@ function Footer() {
 
 			{/* Bottom Footer */}
 			<div className='footer-bottom'>
-				<p className='footer-copy'>© 2024 Trendify. Tüm hakları saklıdır.</p>
+				<p className='footer-copy'>© 2024 Moon. Tüm hakları saklıdır.</p>
 				<ul className='footer-bottom-links'>
 					<li>
 						<Link to='/contact' className='footer-link'>

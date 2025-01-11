@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import Layout from './Layout/Layout';
 import Main from './pages/General/Main';
 import Error from './pages/General/ErrorPage';
-import AdminControls from './pages/Users/Admin/AdminControls';
 import ItemInfo from './pages/General/ItemInfo';
 import Contact from './pages/General/Contact';
 import Login from './pages/Auth/Login';
@@ -39,7 +38,6 @@ function App() {
 						<Routes>
 							<Route path='/' element={<Layout />}>
 								<Route index element={<Main />} />
-								<Route path='admin-controls' element={<AdminControls />} />
 								<Route path='item-info' element={<ItemInfo />} />
 								<Route path='login' element={<Login />} />
 								<Route path='register' element={<Register />} />

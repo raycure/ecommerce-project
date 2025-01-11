@@ -7,11 +7,6 @@ import { FaUser } from 'react-icons/fa6';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoggedIn } from '../redux/requestSlice';
-import {
-	setUserType,
-	setUserId,
-	resetUserInfo,
-} from '../redux/Slices/UserInfoSlice';
 import SearchBar from '../components/UI/SearchBar';
 import { requestService } from '../redux/requestService';
 function CustomNavbar() {
@@ -39,9 +34,6 @@ function CustomNavbar() {
 					{userType === 'seller' && <Nav.Link href='/shop'>Dükkanım</Nav.Link>}
 					{userType !== 'admin' && (
 						<Nav.Link href='/contact'>Bize Ulaşın</Nav.Link>
-					)}
-					{userType === 'admin' && (
-						<Nav.Link href='/admin-controls'>Kontrol Sayfası</Nav.Link>
 					)}
 				</Nav>
 				<SearchBar />

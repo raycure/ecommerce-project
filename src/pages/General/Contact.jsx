@@ -13,7 +13,7 @@ const Contact = () => {
 			<div className='contact-info'>
 				<div className='info-section'>
 					<h2>Email</h2>
-					<p>iletisim@trendify.com</p>
+					<p>iletisim@Moon.com</p>
 				</div>
 				<div className='info-section'>
 					<h2>Telefon</h2>
@@ -21,13 +21,13 @@ const Contact = () => {
 				</div>
 				<div className='info-section'>
 					<h2>Adres</h2>
-					<p>Trendify Cad., No: 34, Şişli, İstanbul, Türkiye</p>
+					<p>Moon Cad., No: 34, Şişli, İstanbul, Türkiye</p>
 				</div>
 				<div className='info-section'>
 					<h2>Sosyal Medya</h2>
 					<p>
 						<a
-							href='https://instagram.com/trendify'
+							href='https://instagram.com/Moon'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -35,7 +35,7 @@ const Contact = () => {
 						</a>{' '}
 						|{' '}
 						<a
-							href='https://twitter.com/trendify'
+							href='https://twitter.com/Moon'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -43,7 +43,7 @@ const Contact = () => {
 						</a>{' '}
 						|{' '}
 						<a
-							href='https://facebook.com/trendify'
+							href='https://facebook.com/Moon'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -55,9 +55,9 @@ const Contact = () => {
 			<div className='company-story'>
 				<h2>Misyonumuz</h2>
 				<p>
-					Trendify olarak amacımız, modern ve sürdürülebilir alışveriş
-					deneyimini herkes için erişilebilir hale getirmektir. Müşterilerimize
-					yalnızca ürün sunmuyor, aynı zamanda bir yaşam tarzı öneriyoruz. Her
+					Moon olarak amacımız, modern ve sürdürülebilir alışveriş deneyimini
+					herkes için erişilebilir hale getirmektir. Müşterilerimize yalnızca
+					ürün sunmuyor, aynı zamanda bir yaşam tarzı öneriyoruz. Her
 					adımımızda, çevreye duyarlı ve etik üretim standartlarını göz önünde
 					bulunduruyoruz.
 				</p>
@@ -70,14 +70,14 @@ const Contact = () => {
 				<h2>Hikayemiz</h2>
 				<p>
 					2024 yılında bir grup vizyoner girişimci tarafından İstanbul’da
-					kurulan Trendify, başlarda küçük bir ekip ve sınırlı bir ürün
-					yelpazesi ile faaliyet göstermeye başladı. Ancak kullanıcıların
-					ihtiyaçlarına hızlı bir şekilde yanıt verme yeteneğimiz ve yenilikçi
-					yaklaşımlarımız sayesinde kısa sürede büyüdük.
+					kurulan Moon, başlarda küçük bir ekip ve sınırlı bir ürün yelpazesi
+					ile faaliyet göstermeye başladı. Ancak kullanıcıların ihtiyaçlarına
+					hızlı bir şekilde yanıt verme yeteneğimiz ve yenilikçi yaklaşımlarımız
+					sayesinde kısa sürede büyüdük.
 				</p>
 				<p>
-					Trendify olarak, kurulduğumuz günden bu yana, kullanıcılarımızı en
-					yeni trendlerle buluşturmayı, onlara kaliteli ve uygun fiyatlı ürünler
+					Moon olarak, kurulduğumuz günden bu yana, kullanıcılarımızı en yeni
+					trendlerle buluşturmayı, onlara kaliteli ve uygun fiyatlı ürünler
 					sunmayı kendimize misyon edindik. Bugün, dünya çapında binlerce mutlu
 					müşterimizle büyümeye ve yenilikler sunmaya devam ediyoruz.
 				</p>

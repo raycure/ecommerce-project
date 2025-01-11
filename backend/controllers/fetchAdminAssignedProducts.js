@@ -80,7 +80,7 @@ const fetchSellers = async (req, res) => {
 				brand,
 				sellerId,
 				productId,
-				seller: sellerName + ' ' + sellerSurname,
+				sellerFullName: sellerName + ' ' + sellerSurname,
 				price,
 				category,
 				title,
@@ -92,12 +92,10 @@ const fetchSellers = async (req, res) => {
 		});
 	} catch (error) {
 		console.log('error in fetchSellers', error);
-
-		// return res.status(500).json({
-		// 	success: false,
-		// 	message: 'Internal server error',
-		// 	error: process.env.NODE_ENV === 'development' ? error.message : undefined,
-		// });
+		return res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
 	}
 };
 

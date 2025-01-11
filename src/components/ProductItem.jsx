@@ -20,7 +20,6 @@ function ProductItem({ product }) {
 			`/shop/?productId=${product.productId}&sellerId=${product.sellerId}`
 		);
 	};
-	const handleProductDelete = () => {};
 	return (
 		<Card style={{ width: '12rem' }}>
 			<Card.Img
@@ -68,7 +67,7 @@ function ProductItem({ product }) {
 							width: '100%',
 						}}
 					>
-						duzenle
+						Düzenle
 					</Button>
 				)}
 				{userType === 'admin' && (
@@ -84,8 +83,7 @@ function ProductItem({ product }) {
 							gap: '3px',
 						}}
 					>
-						{' '}
-						Incele
+						İncele
 					</Button>
 				)}
 			</Card.Body>

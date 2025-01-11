@@ -28,7 +28,8 @@ function Shop() {
 	const dispatch = useDispatch();
 
 	const [searchParams] = useSearchParams();
-	const sellerId = searchParams.get('sellerId');
+	const sellerId = searchParams.get('sellerId') || userId;
+
 	async function updateSeller(updateType) {
 		try {
 			console.log('updateType', updateType);

@@ -74,6 +74,7 @@ const login = async (req, res) => {
 			accessToken: accessToken,
 			userType: idType,
 			message: 'basarili bir sekilde giris yaptiniz',
+			userId,
 		});
 	} catch (error) {
 		console.log('error', error);
