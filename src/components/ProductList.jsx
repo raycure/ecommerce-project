@@ -1,24 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import ProductSelector from './ProductSelector';
 import ProductItem from './ProductItem';
-import Products from '../assets/Products';
+import { useProducts } from '../services/productStore';
 import CustomPagination from './UI/CustomPagination';
-function ProductList({ selectedCategory, sellerId }) {
+import { data } from 'react-router';
+function ProductList({ selectedCategory, sellerId, Data }) {
 	const [productSelector, setProductSelector] = useState({
 		brands: [],
 		minPrice: 0,
 		maxPrice: 0,
-		sellerVerified: false, //false olunca sadece verified olmayanlar değil hepsini göstermiş oluyor
+		showOnlyVerifiedSellers: false, //false olunca sadece verified olmayanlar değil hepsini göstermiş oluyor
 	});
-	const products = Products.filter((product) => {
+
+	const [paginationPageNumber, setPaginationPageNumber] = useState(1);
+	useEffect(() => {
+		setPaginationPageNumber(1);
+	}, [
+		selectedCategory,
+		productSelector.showVerifiedSellers,
+		productSelector.brands,
+	]);
+	console.log('Data', Data);
+
+	if (!Data) return <div>No products found</div>;
+
+	const products = Data?.mappedResults.filter((product) => {
 		const isPriceValid =
 			(productSelector.minPrice <= 0 ||
 				product.price >= productSelector.minPrice) &&
 			(productSelector.maxPrice <= 0 ||
 				product.price <= productSelector.maxPrice);
 		const isSellerValid =
-			productSelector.sellerVerified === false ||
-			product.sellerVerified === productSelector.sellerVerified;
+			productSelector.showOnlyVerifiedSellers === false ||
+			product.showOnlyVerifiedSellers ===
+				productSelector.showOnlyVerifiedSellers;
 		const isBrandValid =
 			productSelector.brands.length === 0 ||
 			productSelector.brands.includes(product.brand);
@@ -38,19 +53,12 @@ function ProductList({ selectedCategory, sellerId }) {
 			isSellerSelected
 		);
 	});
-	const [paginationPageNumber, setPaginationPageNumber] = useState(1);
+
 	const itemsPerPage = 16;
 	const lastIndex = paginationPageNumber * itemsPerPage;
 	const firstIndex = lastIndex - itemsPerPage;
 	const paginatedEvents = products.slice(firstIndex, lastIndex);
 	const pageAmount = Math.ceil(products.length / itemsPerPage);
-	useEffect(() => {
-		setPaginationPageNumber(1);
-	}, [
-		selectedCategory,
-		productSelector.sellerVerified,
-		productSelector.brands,
-	]);
 	return (
 		<section className='product-list-outer-con'>
 			<ProductSelector
@@ -73,6 +81,11 @@ function ProductList({ selectedCategory, sellerId }) {
 					/>
 				</section>
 			)}
+
+			{/* <div>
+				{isFetching && <div>Refreshing data...</div>}
+				<div>Last updated: {timeAgo}</div>
+			</div> */}
 		</section>
 	);
 }

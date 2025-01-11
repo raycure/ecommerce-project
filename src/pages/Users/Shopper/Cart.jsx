@@ -3,25 +3,31 @@ import OrderItem from '../../../components/OrderItem';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
+import { selectCartItems } from '../../../redux/Slices/OrderInfoSlice';
 function Cart() {
 	const navigate = useNavigate();
-	const orderInfo = useSelector((state) => state.orderInfo);
-	const orderItems = orderInfo.orderItems;
+	const orderItems = useSelector(selectCartItems).orderItems;
 	const orderDate = new Date();
 	const userAddress = 'Çağlayan, 34403 Kağıthane/İstanbul';
-	let orderTotal = 0;
+	// todo get user adress
+	let allOrdersTotal = 0;
+
 	orderItems.map((orderItem) => {
-		orderTotal = orderTotal + orderItem.price * orderItem.amount;
+		allOrdersTotal = orderItem.price + allOrdersTotal;
 	});
+
 	const handleCartSubmit = () => {
-		navigate('/purchase', { state: orderTotal });
+		navigate('/purchase', { state: allOrdersTotal });
 	};
+
 	return (
 		<section className='cart-outer-container'>
 			<div>
 				{orderItems.map((orderItem, index) => (
-					<OrderItem key={index} orderItem={orderItem} />
+					<OrderItem key={index} orderData={orderItem.item} />
 				))}
 			</div>
 			<Card style={{ padding: '1rem 0.5rem', height: 'max-content' }}>
@@ -32,7 +38,7 @@ function Cart() {
 					<Card.Text>
 						Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 					</Card.Text>
-					<Card.Text>Toplam Ödeme Miktarı: {orderTotal}₺</Card.Text>
+					<Card.Text>Toplam Ödeme Miktarı: {allOrdersTotal}₺</Card.Text>
 					<hr />
 					<Button
 						style={{ width: '100%' }}

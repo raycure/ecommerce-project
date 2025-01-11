@@ -11,15 +11,18 @@ const OrderInfo = createSlice({
 	initialState,
 	reducers: {
 		addOrderItem(state, action) {
-			const existingItem = state.orderItems.find(
-				(item) => item.seller_productId === action.payload.seller_productId
-			);
-			if (existingItem) {
-				Object.assign(existingItem, { ...action.payload });
-			} else {
-				state.orderItems.push({ ...action.payload });
-			}
+			// const existingItem = state.orderItems.find(
+			// 	(item) => item.seller_productId === action.payload.seller_productId
+			// );
+			// if (existingItem) {
+			// 	console.log('existingItem got triggered');
+			// 	Object.assign(existingItem, { ...action.payload });
+			// } else {
+			// 	state.orderItems.push({ ...action.payload });
+			// }
+			state.orderItems.push({ ...action.payload });
 		},
+		// todo this removes all of the orders
 		removeOrderItem(state, action) {
 			state.orderItems = state.orderItems.filter(
 				(item) => item.seller_productId !== action.payload.seller_productId
@@ -36,4 +39,5 @@ const OrderInfo = createSlice({
 
 export const { addOrderItem, removeOrderItem, updateOrderDetails } =
 	OrderInfo.actions;
+export const selectCartItems = (state) => state.orderInfo;
 export default OrderInfo.reducer;
