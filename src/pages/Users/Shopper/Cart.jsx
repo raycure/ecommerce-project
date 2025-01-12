@@ -8,7 +8,7 @@ import { selectCartItems } from '../../../redux/Slices/OrderInfoSlice';
 function Cart() {
 	const navigate = useNavigate();
 	const orderItems = useSelector(selectCartItems).orderItems;
-	const userInfo = useSelector((state) => state.userInfo);
+	const userInfo = useSelector((state) => state.userInfo.user);
 
 	const orderDate = new Date();
 	const userAddress = userInfo?.address;
@@ -33,7 +33,7 @@ function Cart() {
 				<Card.Body>
 					<Card.Title>Sipariş Özeti</Card.Title>
 					<hr />
-					{/* <Card.Text className='mb-1'>Sipariş Adresi: {userAddress}</Card.Text> */}
+					<Card.Text className='mb-1'>Sipariş Adresi: {userAddress}</Card.Text>
 					<Card.Text>
 						Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 					</Card.Text>
