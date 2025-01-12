@@ -45,7 +45,7 @@ function CustomNavbar() {
 								<NavDropdown.Item onClick={handleLogout}>
 									Çıkış Yap
 								</NavDropdown.Item>
-								{userType !== 'admin' && (
+								{userType === 'customer' && (
 									<NavDropdown.Item href='/orders'>
 										Siparişlerim
 									</NavDropdown.Item>

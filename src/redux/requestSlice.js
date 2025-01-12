@@ -51,9 +51,10 @@ export const fetchData = createAsyncThunk(
 			if (url.includes('/login') || url.includes('/register')) {
 				dispatch(setUserType(response.data.userType));
 				dispatch(setUser(response.data.existingUser));
-				if (response.data.userType === 'seller') {
-					dispatch(setUserType(response.data.userId));
-				}
+				dispatch(setUserId(response.data.userId));
+				// if (response.data.userType === 'seller') {
+				// 	dispatch(setUserType(response.data.userId));
+				// }
 			}
 			if (url.includes('/logout')) {
 				dispatch(resetUserInfo());
