@@ -50,7 +50,7 @@ function Orders() {
 												Ürün Miktarı: {orderData?.amount} tane
 											</Card.Text>
 											<Card.Text className='mb-0'>
-												Ürün Fiyatı: {orderData.eachPrice} ₺
+												Ürün Fiyatı: {orderData.price} ₺
 											</Card.Text>
 										</span>
 									</div>

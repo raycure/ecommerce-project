@@ -25,7 +25,7 @@ CREATE TABLE customertable(
     `address` text NOT null,
     phone varchar(11),
     email varchar(50),
-    `password` varchar(60) not null,
+    `password` varchar(30) not null,
     PRIMARY KEY (customerId)
 );
 DELIMITER $$ /* customertable için telefon ve mail en az biri var mı diye trigger kontrolu */
@@ -113,7 +113,7 @@ CREATE TABLE admintable(
     surname varchar(30) NOT null,
     phone varchar(11),
     email varchar(50),
-    `password` varchar(60) not null,
+    `password` varchar(30) not null,
     PRIMARY KEY (adminId)
 );
 DELIMITER $$ /* admintable için telefon ve mail en az biri var mı diye trigger kontrolu */
@@ -144,10 +144,10 @@ CREATE TABLE sellertable(
     surname varchar(30) NOT null,
     phone varchar(11),
     email varchar(50),
-    verified boolean DEFAULT false,
-    banned boolean DEFAULT false,
+    verified boolean,
+    banned boolean,
+    `password` varchar(30) not null,
     image TEXT,
-    `password` varchar(60) not null,
     PRIMARY KEY (sellerId)
 );
 DELIMITER $$ /* sellertable için telefon ve mail en az biri var mı diye trigger kontrolu */
@@ -160,7 +160,7 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
-INSERT INTO sellertable (`name`, surname, phone, email, verified, banned, `password`, image) 
+INSERT INTO sellertable (`name`, surname, phone, email, verified, banned,`password`, image) 
 VALUES 
 ("Cem", "Balcı", "05321345678", "cembalcı@yahoo.com", TRUE, FALSE, "balcicem", "https://www.looper.com/img/gallery/the-hidden-meaning-behind-walter-whites-pork-pie-hat-in-breaking-bad/intro-1599848228.jpg"),
 ("Yasemin", "Güven", "05523456790", "yaseminguven@gmail.com", FALSE, FALSE, "guvenyasemin", "https://cdn.legit.ng/images/1120/70ed79ab8e577c76.jpeg?v=1"),
@@ -174,12 +174,13 @@ VALUES
 ("Hale", "Uygur", "05325678965", "haleuygur@hotmail.com", FALSE, FALSE, "uyguruhale", "https://static1.srcdn.com/wordpress/wp-content/uploads/2022/08/Nadja-from-What-We-Do-in-the-Shadows-2.jpg");
 
 
+
 CREATE TABLE categorytable(
 	categoryId int AUTO_INCREMENT NOT null,
-    `categoryName` varchar(30) NOT null,
+    `name` varchar(30) NOT null,
     PRIMARY KEY (categoryId)
 );
-INSERT INTO categorytable (`categoryName`)  
+INSERT INTO categorytable (`name`)  
 VALUES 
 ("Elektronik"),      
 ("Moda"),        
@@ -198,10 +199,10 @@ VALUES
 ("Ayakkabı");    
 CREATE TABLE brandtable(
 	brandId int AUTO_INCREMENT NOT null,
-    `brandName` varchar(30) NOT null,
+    `name` varchar(30) NOT null,
     PRIMARY KEY (brandId)
 );
-INSERT INTO brandtable (`brandName`)  
+INSERT INTO brandtable (`name`)  
 VALUES 
 ("Apple"),  
 ("Bosch"),   
@@ -251,77 +252,79 @@ VALUES
 ("Faber-Castell"),
 ("Can Yayınları");   
 
-CREATE TABLE producttable (
-    productId INT AUTO_INCREMENT NOT NULL,
-    `name` VARCHAR(50) NOT NULL,
-    `description` TEXT NOT NULL,
-    category INT NOT NULL,
-    brand INT NOT NULL,
+CREATE TABLE producttable(
+	productId int AUTO_INCREMENT NOT null,
+    `name` varchar(50) NOT null,
+    `description` text NOT null,
+    category int NOT null,
+    brand int NOT null,
     `image` TEXT,
-    PRIMARY KEY (productId)
+    PRIMARY KEY (productId),
+    FOREIGN KEY (brand) REFERENCES brandtable(brandId) ON DELETE CASCADE,
+    FOREIGN KEY (category) REFERENCES categorytable(categoryId) ON DELETE CASCADE
 );
 INSERT INTO producttable (`name`, `description`, category, brand, `image`)
-VALUES 
+VALUES
 ("iPhone 14", "Apple'ın en son akıllı telefonu, gelişmiş özelliklerle.", 1, 1, "https://productimages.hepsiburada.net/s/376/960-1280/110000393677091.jpg"),
 ("Galaxy S22", "Samsung'un yüksek performanslı amiral gemisi akıllı telefonu.", 1, 6, "https://productimages.hepsiburada.net/s/177/960-1280/110000141556265.jpg"),
-("Airpods Pro","Kablosuz aktif gürültü önleyici kulaklık. ", 1, 1,"https://productimages.hepsiburada.net/s/337/424-600/110000031510507.jpg/format:webp"),
-("ThinkPad X1","Yüksek performanslı iş dizüstü bilgisayarı.", 1, 9,"https://productimages.hepsiburada.net/s/556/424-600/110000618242346.jpg/format:webp"),
-("OLED TV","65 inç 4K OLED akıllı TV.", 1, 7,"https://productimages.hepsiburada.net/s/353/424-600/110000362001550.jpg/format:webp"),
-("Nike Air Max","Şık ve rahat koşu ayakkabısı.", 15, 4,"https://productimages.hepsiburada.net/s/777/424-600/110000838617231.jpg/format:webp"),
-("Adidas Ultraboost","Yüksek performanslı koşu ayakkabısı.", 15, 5,"https://productimages.hepsiburada.net/s/777/424-600/110000736484719.jpg/format:webp"),
-("Oyuncu Faresi","Ergonomik RGB aydınlatmalı fare.", 1, 27,"https://productimages.hepsiburada.net/s/66/424-600/110000007687999.jpg/format:webp"),
-("Elektrikli Su Isıtıcı","1.7L paslanmaz çelik su ısıtıcı.", 13, 2,"https://productimages.hepsiburada.net/s/8/424-600/8866204909618.jpg/format:webp"),
-("Blender","Yüksek hızlı tezgah üstü blender.", 13, 2,"https://productimages.hepsiburada.net/s/397/424-600/110000421900482.jpg/format:webp"),
-("Saç Kurutma Makinesi","Kompakt ve güçlü saç kurutma makinesi.", 13, 3,"https://productimages.hepsiburada.net/s/777/424-600/110000764704665.jpg/format:webp"),
-("Ruj","Uzun süre kalıcı mat ruj.", 14, 28,"https://productimages.hepsiburada.net/s/26/424-600/10164195491890.jpg/format:webp"),
-("Defter","A5 boyutunda çizgili defter.", 8, 29,"https://productimages.hepsiburada.net/s/777/424-600/110000822385176.jpg/format:webp"),
-("Tükenmez Kalemler","10'lu mavi mürekkepli kalem seti.", 8, 29,"https://productimages.hepsiburada.net/s/111/424-600/110000058520443.jpg/format:webp"),
-("Kitaplık","Modern 5 raflı ahşap kitaplık.", 10, 22,"https://productimages.hepsiburada.net/s/70/424-600/110000011138205.jpg/format:webp"),
-("Yoga Matı","Kaymaz, çevre dostu yoga matı.", 7, 30,"https://productimages.hepsiburada.net/s/777/424-600/110000776432767.jpg/format:webp"),
-("Koşu Bandı","Ev kullanımı için motorlu koşu bandı.", 7, 31,"https://productimages.hepsiburada.net/s/429/424-600/110000460900438.jpg/format:webp"),
+("Airpods Pro", "Kablosuz aktif gürültü önleyici kulaklık.", 1, 1, "https://productimages.hepsiburada.net/s/337/424-600/110000031510507.jpg/format:webp"),
+("ThinkPad X1", "Yüksek performanslı iş dizüstü bilgisayarı.", 1, 9, "https://productimages.hepsiburada.net/s/556/424-600/110000618242346.jpg/format:webp"),
+("OLED TV", "65 inç 4K OLED akıllı TV.", 1, 7, "https://productimages.hepsiburada.net/s/353/424-600/110000362001550.jpg/format:webp"),
+("Nike Air Max", "Şık ve rahat koşu ayakkabısı.", 15, 4, "https://productimages.hepsiburada.net/s/777/424-600/110000838617231.jpg/format:webp"),
+("Adidas Ultraboost", "Yüksek performanslı koşu ayakkabısı.", 15, 5," https://productimages.hepsiburada.net/s/777/424-600/110000736484719.jpg/format:webp"),
+("Oyuncu Faresi", "Ergonomik RGB aydınlatmalı fare.", 1, 27, "https://productimages.hepsiburada.net/s/66/424-600/110000007687999.jpg/format:webp"),
+("Elektrikli Su Isıtıcı", "1.7L paslanmaz çelik su ısıtıcı.", 13, 2, "https://productimages.hepsiburada.net/s/8/424-600/8866204909618.jpg/format:webp"),
+("Blender", "Yüksek hızlı tezgah üstü blender.", 13, 2," https://productimages.hepsiburada.net/s/397/424-600/110000421900482.jpg/format:webp"),
+("Saç Kurutma Makinesi", "Kompakt ve güçlü saç kurutma makinesi.", 13, 3, "https://productimages.hepsiburada.net/s/777/424-600/110000764704665.jpg/format:webp"),
+("Ruj", "Uzun süre kalıcı mat ruj.", 14, 28,"https://productimages.hepsiburada.net/s/26/424-600/10164195491890.jpg/format:webp"),
+("Defter", "A5 boyutunda çizgili defter.", 8, 29, "https://productimages.hepsiburada.net/s/777/424-600/110000822385176.jpg/format:webp"),
+("Tükenmez Kalemler", "10'lu mavi mürekkepli kalem seti.", 8, 29, "https://productimages.hepsiburada.net/s/111/424-600/110000058520443.jpg/format:webp"),
+("Kitaplık", "Modern 5 raflı ahşap kitaplık.", 10, 22, "https://productimages.hepsiburada.net/s/70/424-600/110000011138205.jpg/format:webp"),
+("Yoga Matı", "Kaymaz, çevre dostu yoga matı.", 7, 30, "https://productimages.hepsiburada.net/s/777/424-600/110000776432767.jpg/format:webp"),
+("Koşu Bandı", "Ev kullanımı için motorlu koşu bandı.", 7, 31," https://productimages.hepsiburada.net/s/429/424-600/110000460900438.jpg/format:webp"),
 ("Akustik Gitar", "6 telli akustik gitar.", 12, 32, "https://productimages.hepsiburada.net/s/171/424-600/110000133763614.jpg/format:webp"),
-("Keman", "Yeni başlayanlar için kaliteli ahşap keman.", 12, 32,"https://productimages.hepsiburada.net/s/34/424-600/10458215481394.jpg/format:webp"),
-("Buzdolabı", "Çift kapılı buzlanma önleyici buzdolabı.", 5, 2,"https://productimages.hepsiburada.net/s/315/424-600/110000308964514.jpg/format:webp"),
-("Çamaşır Makinesi", "Gelişmiş yıkama özelliklerine sahip çamaşır makinesi.", 5, 2,"https://productimages.hepsiburada.net/s/777/424-600/110000671014070.jpg/format:webp"),
+("Keman", "Yeni başlayanlar için kaliteli ahşap keman.", 12, 32," https://productimages.hepsiburada.net/s/34/424-600/10458215481394.jpg/format:webp"),
+("Buzdolabı", "Çift kapılı buzlanma önleyici buzdolabı.", 5, 2," https://productimages.hepsiburada.net/s/315/424-600/110000308964514.jpg/format:webp"),
+("Çamaşır Makinesi", "Gelişmiş yıkama özelliklerine sahip çamaşır makinesi.", 5, 2," https://productimages.hepsiburada.net/s/777/424-600/110000671014070.jpg/format:webp"),
 ("Protein Bar", "Yüksek proteinli atıştırmalık bar.", 3, 33, "https://productimages.hepsiburada.net/s/286/424-600/110000275304677.jpg/format:webp"),
-("Kutu Coca Cola", "Serinletici gazlı içecek.", 3, 13,"https://productimages.hepsiburada.net/s/48/424-600/10940079734834.jpg/format:webp"),
+("Kutu Coca Cola", "Serinletici gazlı içecek.", 3, 13," https://productimages.hepsiburada.net/s/48/424-600/10940079734834.jpg/format:webp"),
 ("Yazıcı", "Kablosuz çok işlevli yazıcı.", 6, 17, "https://productimages.hepsiburada.net/s/412/424-600/110000441140169.jpg/format:webp"),
-("Projeksiyon Cihazı", "Taşınabilir 1080p projeksiyon cihazı.", 6, 34,"https://productimages.hepsiburada.net/s/777/424-600/110000773249859.jpg/format:webp"),
-("Bebek Arabası", "Kompakt ve hafif bebek arabası.", 9, 35,"https://productimages.hepsiburada.net/s/413/424-600/110000442912350.jpg/format:webp"),
+("Projeksiyon Cihazı", "Taşınabilir 1080p projeksiyon cihazı.", 6, 34," https://productimages.hepsiburada.net/s/777/424-600/110000773249859.jpg/format:webp"),
+("Bebek Arabası", "Kompakt ve hafif bebek arabası.", 9, 35," https://productimages.hepsiburada.net/s/413/424-600/110000442912350.jpg/format:webp"),
 ("Bebek Monitörü", "Dijital sesli ve görüntülü bebek monitörü.", 9, 10, "https://productimages.hepsiburada.net/s/451/424-600/110000486621018.jpg/format:webp"),
 ("Duvar Saati", "Minimalist tasarımlı duvar saati.", 10, 22, "https://productimages.hepsiburada.net/s/777/424-600/110000773439837.jpg/format:webp"),
 ("Masa Lambası", "Ayarlanabilir LED masa lambası.", 10, 22, "https://productimages.hepsiburada.net/s/777/424-600/110000722385109.jpg/format:webp"),
 ("Tişört", "Rahat pamuklu tişört.", 2, 4, "https://productimages.hepsiburada.net/s/39/424-600/10619241267250.jpg/format:webp"),
-("Kot Pantolon", "Dar kesim denim pantolon.", 2, 23,"https://productimages.hepsiburada.net/s/777/424-600/110000664686141.jpg/format:webp"),
+("Kot Pantolon", "Dar kesim denim pantolon.", 2, 23," https://productimages.hepsiburada.net/s/777/424-600/110000664686141.jpg/format:webp"),
 ("Küpe", "Şık altın kaplama küpe.", 11, 36, "https://productimages.hepsiburada.net/s/777/424-600/110000650972225.jpg/format:webp"),
 ("Akıllı Saat", "Fitness takibi için akıllı saat.", 1, 1, "https://productimages.hepsiburada.net/s/777/424-600/110000773544127.jpg/format:webp"),
 ("Bluetooth Hoparlör", "Taşınabilir kablosuz hoparlör.", 1, 7, "https://productimages.hepsiburada.net/s/98/424-600/110000041433129.jpg/format:webp"),
 ("Güneş Şapkası", "Geniş kenarlı güneş koruyucu şapka.", 2, 5, "https://productimages.hepsiburada.net/s/353/424-600/110000362037070.jpg/format:webp"),
 ("Elektrikli Diş Fırçası", "Şarj edilebilir elektrikli diş fırçası.", 13, 24, "https://productimages.hepsiburada.net/s/446/424-600/110000480840636.jpg/format:webp"),
-("Dijital Kamera", "Kompakt bir fotoğraf makinesi.", 1, 17,"https://productimages.hepsiburada.net/s/777/424-600/110000643901391.jpg/format:webp"),
+("Dijital Kamera", "Kompakt bir fotoğraf makinesi.", 1, 17," https://productimages.hepsiburada.net/s/777/424-600/110000643901391.jpg/format:webp"),
 ("Kamp Çadırı", "4 kişilik su geçirmez kamp çadırı.", 7, 37, "https://productimages.hepsiburada.net/s/429/424-600/110000461038501.jpg/format:webp"),
 ("Dizüstü Soğutucu", "4 fanlı laptop soğutucu.", 1, 17, "https://productimages.hepsiburada.net/s/53/424-600/11162030080050.jpg/format:webp"),
 ("Akıllı Buzdolabı", "Wi-Fi özellikli çok kapılı buzdolabı.", 5, 7, "https://productimages.hepsiburada.net/s/390/424-600/110000413823457.jpg/format:webp"),
 ("MacBook Pro", "Apple'ın yüksek performanslı dizüstü bilgisayarı, mükemmel ekran ve işlemci gücüyle.", 1, 1, "https://productimages.hepsiburada.net/s/777/424-600/110000804866453.jpg/format:webp"),
-("Xiaomi Mi Band 7", "Xiaomi'nin yeni nesil fitness takip cihazı, kalp atış hızı ve uyku takibi.", 1, 12,"https://productimages.hepsiburada.net/s/777/424-600/110000658342950.jpg/format:webp"),
-("Samsung Galaxy Buds Pro", "Kablosuz aktif gürültü engelleme özelliğine sahip kulaklık.", 1, 6,"https://productimages.hepsiburada.net/s/406/424-600/110000434110500.jpg/format:webp"),
-("LG OLED Monitor", "4K çözünürlükte büyük OLED ekran monitör.", 1, 8,"https://productimages.hepsiburada.net/s/777/424-600/110000751743541.jpg/format:webp"),
+("Xiaomi Mi Band 7", "Xiaomi'nin yeni nesil fitness takip cihazı, kalp atış hızı ve uyku takibi.", 1, 12," https://productimages.hepsiburada.net/s/777/424-600/110000658342950.jpg/format:webp"),
+("Samsung Galaxy Buds Pro", "Kablosuz aktif gürültü engelleme özelliğine sahip kulaklık.", 1, 6," https://productimages.hepsiburada.net/s/406/424-600/110000434110500.jpg/format:webp"),
+("LG OLED Monitor", "4K çözünürlükte büyük OLED ekran monitör.", 1, 8," https://productimages.hepsiburada.net/s/777/424-600/110000751743541.jpg/format:webp"),
 ("Lenovo Ideapad 3", "Şık ve hafif tasarıma sahip Lenovo dizüstü bilgisayar.", 1, 9, "https://productimages.hepsiburada.net/s/777/424-600/110000845872759.jpg/format:webp"),
 ("Sony PlayStation 5", "Sony'nin yeni nesil oyun konsolu, ultra hızlı SSD ile oyun deneyimi.", 1, 38, "https://productimages.hepsiburada.net/s/530/424-600/110000587446794.jpg/format:webp"),
-("Nike ZoomX Vaporfly", "Nike'ın en hızlı koşu ayakkabısı, maraton koşuları için ideal.", 15, 4,"https://productimages.hepsiburada.net/s/54/424-600/11166243618866.jpg/format:webp"),
+("Nike ZoomX Vaporfly", "Nike'ın en hızlı koşu ayakkabısı, maraton koşuları için ideal.", 15, 4," https://productimages.hepsiburada.net/s/54/424-600/11166243618866.jpg/format:webp"),
 ("Adidas Predator Soccer Shoes", "Futbol için tasarlanmış, mükemmel tutuşa sahip ayakkabı.", 15, 5, "https://productimages.hepsiburada.net/s/777/424-600/110000799861366.jpg/format:webp"),
-("Bose QuietComfort 45", "Bose'un üstün ses yalıtımına sahip kulaklıkları.", 1, 39,"https://productimages.hepsiburada.net/s/381/424-600/110000400484733.jpg/format:webp"),
+("Bose QuietComfort 45", "Bose'un üstün ses yalıtımına sahip kulaklıkları.", 1, 39," https://productimages.hepsiburada.net/s/381/424-600/110000400484733.jpg/format:webp"),
 ("Black+Decker Elektrikli Matkap", "Hafif ve taşınabilir elektrikli matkap.", 13, 40, "https://productimages.hepsiburada.net/s/777/424-600/110000775309140.jpg/format:webp"),
 ("Canon EOS 90D", "Canon'un yüksek çözünürlüklü DSLR fotoğraf makinesi.", 1, 17,"https://productimages.hepsiburada.net/s/35/424-600/10477335052338.jpg/format:webp"),
 ("Panasonic Lumix GX9", "Kompakt ve taşınabilir, kaliteli fotoğraf çekimi yapan dijital kamera.", 1, 18, "https://productimages.hepsiburada.net/s/777/424-600/110000695548165.jpg/format:webp"),
 ("Şişe Coca-Cola", "Yaz için serinletici gazlı içecek, 1.5 litre.", 3, 13, "https://productimages.hepsiburada.net/s/33/424-600/10417878138930.jpg/format:webp"),
 ("Kutu Pepsi", "Pepsi'nin klasik, tatlı gazlı içeceği.", 3, 14,"https://productimages.hepsiburada.net/s/157/424-600/110000113834188.jpg/format:webp"),
-("Kahve Makinesi", "Çiftli telve, türk kahvesi makinesi.", 13, 15,"https://productimages.hepsiburada.net/s/449/424-600/110000484505567.jpg/format:webp"),
+("Kahve Makinesi", "Çiftli telve, türk kahvesi makinesi.", 13, 15," https://productimages.hepsiburada.net/s/449/424-600/110000484505567.jpg/format:webp"),
 ("Elbise", "Siyah şık mini elbise.", 2, 16, "https://productimages.hepsiburada.net/s/525/424-600/110000582146377.jpg/format:webp"),
 ("Bot", "Koyu camel topuklu deri bilek botu.", 2, 19, "https://productimages.hepsiburada.net/s/544/424-600/110000604834078.jpg/format:webp"),
 ("Çanta", "İşlemeli siyah şık çanta.", 2, 19, "https://productimages.hepsiburada.net/s/777/424-600/110000789324071.jpg/format:webp"),
-("Mini Buzdolabı", "Retro SB14001 Pembe Mini Buzdolabı.", 5, 7,"https://productimages.hepsiburada.net/s/548/424-600/110000609500491.jpg/format:webp"),
-("Fitbit Charge 5", "Fitness ve sağlık takibi için gelişmiş özelliklere sahip akıllı bileklik.", 1, 12,"https://productimages.hepsiburada.net/s/777/424-600/110000817692942.jpg/format:webp"),
+("Mini Buzdolabı", "Retro SB14001 Pembe Mini Buzdolabı.", 5, 7," https://productimages.hepsiburada.net/s/548/424-600/110000609500491.jpg/format:webp"),
+("Fitbit Charge 5", "Fitness ve sağlık takibi için gelişmiş özelliklere sahip akıllı bileklik.", 1, 12," https://productimages.hepsiburada.net/s/777/424-600/110000817692942.jpg/format:webp"),
 ("Sennheiser Momentum Wireless", "Sennheiser'ın üstün ses performansı sunan kablosuz kulaklıkları.", 1, 41, "https://productimages.hepsiburada.net/s/238/424-600/110000221276200.jpg/format:webp"),
 ("Etek", "Püsküllü tüvit etek.", 2, 16, "https://productimages.hepsiburada.net/s/777/424-600/110000800632993.jpg/format:webp"),
 ("Parfüm", "İpekyol Velvet Rose Edp 100 ml Parfüm.", 14, 16, "https://productimages.hepsiburada.net/s/777/424-600/110000813276343.jpg/format:webp"),
@@ -355,7 +358,7 @@ VALUES
 ("Taylor 214ce Akustik Gitar", "Fiyat-performans oranı yüksek, başlangıç seviyesindeki gitar severler için ideal model.", 12, 25, "https://productimages.hepsiburada.net/s/31/424-600/10348286246962.jpg/format:webp"),
 ("Taylor GS Mini Akustik Gitar", "Kompakt boyutlarıyla taşıması kolay, kaliteli ses veren gitar.", 12, 25, "https://productimages.hepsiburada.net/s/777/424-600/110000834394617.jpg/format:webp"),
 ("Taylor 712ce Akustik Gitar", "Yüksek kaliteli işçilik ve zengin ton aralığı sunan profesyonel akustik gitar.", 12, 25, "https://productimages.hepsiburada.net/s/291/424-600/110000278973746.jpg/format:webp"),
-("Casio Privia PX-160 Piyano", "Casio'nun en popüler dijital piyanolarından biri olan PX-160, gerçek piyano sesi ve tuş hissiyatı sunar.", 12, 26, "https://productimages.hepsiburada.net/s/496/424-600/110000546929569.jpg/format:webp"),
+("Casio Privia PX-160 Dijital Piyano", "Casio'nun en popüler dijital piyanolarından biri olan PX-160, gerçek piyano sesi ve tuş hissiyatı sunar.", 12, 26, "https://productimages.hepsiburada.net/s/496/424-600/110000546929569.jpg/format:webp"),
 ("Casio CT-S300 Keyboard", "Taşınabilir ve kompakt yapısı ile giriş seviyesi müzikçilere yönelik eğlenceli ve pratik bir klavye.", 12, 26, "https://productimages.hepsiburada.net/s/42/424-600/10742177988658.jpg/format:webp"),
 ("Parfüm", "Lacoste L.12.12 Rose Sparkling 100ML Kadın Parfüm.", 14, 20, "https://productimages.hepsiburada.net/s/777/424-600/110000667928441.jpg/format:webp"),
 ("Huawei Matepad", "Huawei Matepad 11.5 8GB 128GB 11.5 Tablet.", 1, 11, "https://productimages.hepsiburada.net/s/430/424-600/110000461971707.jpg/format:webp"),
@@ -373,11 +376,11 @@ VALUES
 ("MAC False Lashes Maskara", "Yoğun hacim ve uzunluk sağlayan siyah maskara.", 14, 44, "https://productimages.hepsiburada.net/s/777/222-222/110000681913663.jpg/format:webp"),
 ("Züber Fındık Kreması", "Yüksek proteinli ve çikolatalı lezzetli krema.", 3, 34, "https://productimages.hepsiburada.net/s/777/222-222/110000792813212.jpg/format:webp"),
 ("Züber Hindistan Cevizli Meyve Barı", "Hindistan cevizi ile zenginleştirilmiş doğal meyve barı.", 3, 34, "https://cdn.dsmcdn.com/ty1509/product/media/images/prod/QC/20240829/09/6083e53d-00fc-3946-b690-b27a91acf627/1_org_zoom.jpg"),
-("Faber-Castell Grip 2001 Kurşun Kalem", "Ergonomik tasarımı ve yüksek kaliteli grafit ucu ile yazım rahatlığı sunar.", 8, 50, "https://productimages.hepsiburada.net/s/22/300-400/9972898955314.jpg/format:webp"),
-("Faber-Castell Su Bazlı Keçeli Kalem Seti", "12 canlı renkten oluşan, su bazlı ve kolay temizlenebilir keçeli kalem seti.", 8, 50, "https://productimages.hepsiburada.net/s/777/222-222/110000840930840.jpg/format:webp"),
-("Faber-Castell Kuru Boya Kalemleri 24'lü", "Yumuşak dokulu, kolay açılan ve parlak renklere sahip kuru boya seti.", 8, 50, "https://productimages.hepsiburada.net/s/514/222-222/110000569845560.jpg/format:webp"),
-("Faber-Castell Silinebilir Tükenmez Kalem", "Silinebilir mürekkebiyle pratik ve temiz yazma imkanı sunar.", 8, 50, "https://productimages.hepsiburada.net/s/509/300-400/110000563465458.jpg/format:webp"),
-("Faber-Castell A3 Teknik Çizim Defteri", "Yüksek kaliteli, asitsiz kağıt içeren teknik çizim için ideal defter.", 8, 50, "https://m.media-amazon.com/images/I/51MMYW23KJL._AC_UL480_FMwebp_QL65_.jpg"),
+("Faber-Castell Grip 2001 Kurşun Kalem", "Ergonomik tasarımı ve yüksek kaliteli grafit ucu ile yazım rahatlığı sunar.", 8, 40, "https://productimages.hepsiburada.net/s/22/300-400/9972898955314.jpg/format:webp"),
+("Faber-Castell Su Bazlı Keçeli Kalem Seti", "12 canlı renkten oluşan, su bazlı ve kolay temizlenebilir keçeli kalem seti.", 8, 40, "https://productimages.hepsiburada.net/s/777/222-222/110000840930840.jpg/format:webp"),
+("Faber-Castell Kuru Boya Kalemleri 24'lü", "Yumuşak dokulu, kolay açılan ve parlak renklere sahip kuru boya seti.", 8, 40, "https://productimages.hepsiburada.net/s/514/222-222/110000569845560.jpg/format:webp"),
+("Faber-Castell Silinebilir Tükenmez Kalem", "Silinebilir mürekkebiyle pratik ve temiz yazma imkanı sunar.", 8, 40, "https://productimages.hepsiburada.net/s/509/300-400/110000563465458.jpg/format:webp"),
+("Faber-Castell A3 Teknik Çizim Defteri", "Yüksek kaliteli, asitsiz kağıt içeren teknik çizim için ideal defter.", 8, 40, "https://m.media-amazon.com/images/I/51MMYW23KJL._AC_UL480_FMwebp_QL65_.jpg"),
 ("Flüt", "Yüksek kaliteli flüt, profesyonel kullanım için ideal.", 12, 35, "https://productimages.hepsiburada.net/s/73/222-222/110000015117247.jpg/format:webp"),
 ("Ukulele", "Küçük boyutlu ve taşınabilir ukulele, yeni başlayanlar için mükemmel.", 12, 35, "https://productimages.hepsiburada.net/s/777/222-222/110000783459056.jpg/format:webp"),
 ("Saz", "Türk müziği için uygun, geleneksel saz.", 12, 35, "https://productimages.hepsiburada.net/s/777/222-222/110000760504223.jpg/format:webp"),
@@ -406,37 +409,25 @@ VALUES
 ("Suç ve Ceza", "Fyodor Dostoyevski'nin, insan ruhunun derinliklerine inen büyük eseri.", 4, 40, "https://productimages.hepsiburada.net/s/23/222-222/10008002002994.jpg/format:webp"),
 ("Yüzyıllık Yalnızlık", "Gabriel García Márquez'in büyülü gerçekçilikle yazılmış başyapıtı.", 4, 40, "https://productimages.hepsiburada.net/s/777/222-222/110000815065258.jpg/format:webp"),
 ("Don Kişot", "Miguel de Cervantes'in başyapıtı, bir şövalyenin ve sadık hizmetkarının serüvenlerini konu alır.", 4, 40, "https://www.canyayinlari.com/productimages/116761/big/9789750705090_front_cover.jpg"),
-("Gurur ve Önyargı", "Jane Austen'in, sınıf farklılıkları ve aşk üzerine yazdığı klasik romanı.", 4, 40, "https://www.canyayinlari.com/productimages/121684/middle/9789750761799_front_cover.jpg"),
-("Anna Karenina", "Lev Tolstoy'un, aşk, sadakat ve toplumsal normlar üzerine yazdığı büyük romanı.", 4, 40, "https://www.canyayinlari.com/productimages/119447/middle/9789750739651_front_cover.jpg"),
-("Büyük Umutlar", "Charles Dickens'ın, yoksulluktan zenginliğe geçişin ve hayal kırıklıklarının romanı.", 4, 40, "https://productimages.hepsiburada.net/s/23/222-222/10008195006514.jpg/format:webp"),
-("Moby Dick", "Herman Melville'in, okyanuslarda geçen, bir balina avcısının hikayesini anlatan epik romanı.", 4, 40, "https://productimages.hepsiburada.net/s/37/222-222/10535299088434.jpg/format:webp"),
-("Küçük Prens", "Antoine de Saint-Exupéry'nin, evrensel sevgiyi ve insan ilişkilerini anlatan masalsı eseri.", 4, 40, "https://www.canyayinlari.com/productimages/118452/middle/9789750724435_front_cover.jpg"),
-("Savaş ve Barış", "Lev Tolstoy'un, Napolyon'un Rusya'ya saldırısını ve bunun toplum üzerindeki etkilerini anlattığı dev romanı.", 4, 40, "https://www.canyayinlari.com/productimages/119436/middle/9789750739545_front_cover.jpg"),
-("Mango Çanta", "Mango'nun stil sahibi çantaları, her görünümü tamamlayan mükemmel aksesuar.", 2, 19, "https://productimages.hepsiburada.net/s/777/300-400/110000841876916.jpg/format:webp"),
-("Mango Şapka", "Mango'nun şık şapkaları, yaz ve kış aylarında stilinizi tamamlar.", 2, 19, "https://productimages.hepsiburada.net/s/507/300-400/110000561919254.jpg/format:webp"),
-("Mango Etek", "Mango'nun zarif etekleri, her ortamda şıklığı yakalamanıza yardımcı olur.", 2, 19, "https://productimages.hepsiburada.net/s/777/300-400/110000679920141.jpg/format:webp"),
-("Mango Parfüm", "Mango'nun kadın ve erkek parfümleri, tarzınıza uygun özel kokular sunar.", 2, 19, "https://productimages.hepsiburada.net/s/777/222-222/110000667388418.jpg/format:webp"),
-("Mango Cüzdan", "Mango'nun şık cüzdanları, hem işlevsel hem de şık bir aksesuar arayanlar için ideal.", 2, 19, "https://productimages.hepsiburada.net/s/777/300-400/110000841867631.jpg/format:webp"),
-("Mango Şort", "Mango'nun rahat ve şık şortları, yaz aylarında mükemmel bir seçim.", 2, 19, "https://productimages.hepsiburada.net/s/777/300-400/110000679937452.jpg/format:webp");
+("Gurur ve Önyargı", "Jane Austen'in, sınıf farklılıkları ve aşk üzerine yazdığı klasik romanı.", 4, 40, "https://www.canyayinlari.com/productimages/121684/middle/9789750761799_front_cover.jpg");
 
 CREATE TABLE seller_producttable(
-	-- seller_productId int AUTO_INCREMENT NOT null,
-	seller_productId int AUTO_INCREMENT,
+	seller_productId int AUTO_INCREMENT NOT null,
     sellerId int NOT null,
     productId int NOT null,
     stock int not null,
     price decimal(10,2) NOT null,
     PRIMARY KEY (seller_productId),
     FOREIGN KEY (sellerId) REFERENCES sellertable(sellerId),
-    FOREIGN KEY (productId) REFERENCES producttable(productId)
+    FOREIGN KEY (productId) REFERENCES producttable(productId) ON DELETE CASCADE
 );
 INSERT INTO seller_producttable (sellerId, productId, stock, price)
 VALUES 
 (1, 1, 25, 9999.99),
 (1, 2, 22, 8499.50),
 (1, 3, 28, 2499.00),
-(1, 4, 24, 1799.95),
-(1, 5, 27, 2299.99),
+(1, 4, 24, 17999.95),
+(1, 5, 27, 22999.99),
 (2, 6, 29, 999.50),
 (2, 7, 23, 1200.00),
 (2, 8, 26, 199.99),
@@ -472,77 +463,76 @@ VALUES
 (8, 38, 30, 999.95),
 (8, 39, 25, 749.50),
 (8, 40, 27, 4999.99),
-(9, 1, 21, 1049.99),
+(9, 1, 21, 10499.99),
 (9, 2, 29, 8999.50),
 (9, 3, 22, 2599.00),
-(9, 4, 28, 1800.00),
-(9, 5, 30, 2399.99),
+(9, 4, 28, 18000.00),
+(9, 5, 30, 23999.99),
 (10, 6, 23, 899.95),
 (10, 7, 25, 1300.00),
 (10, 8, 29, 250.00),
 (10, 9, 24, 159.99),
 (10, 10, 22, 599.95);
--- DELIMITER $$ -- for to reserve orderItem when a product get removed by admin or the seller
-
--- CREATE TRIGGER before_seller_product_delete
--- BEFORE DELETE ON seller_producttable
--- FOR EACH ROW
--- BEGIN
---     UPDATE orderitemtable 
---     SET seller_productId = NULL 
---     WHERE seller_productId = OLD.seller_productId;
--- END $$
--- DELIMITER ;
 CREATE TABLE ordertable(
 	orderId int AUTO_INCREMENT NOT null,
     customerId int NOT null,
+    methodtype varchar(30) NOT null,
+    totalPrice DECIMAL(10,2) DEFAULT 0,
     orderdate DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (orderId),
     FOREIGN KEY (customerId) REFERENCES customertable(customerId)
 );
-INSERT INTO ordertable (customerId, orderdate) VALUES 
-(1, '2024-11-01 10:30:00'), 
-(2, DEFAULT),             
-(3, '2024-11-02 15:00:00'), 
-(4, DEFAULT),              
-(5, '2024-10-30 08:45:00'),
-(6, '2024-11-05 12:20:00'), 
-(7, DEFAULT),              
-(8, '2024-11-10 14:10:00'),
-(9, '2024-10-28 09:00:00'), 
-(10, DEFAULT),           
-(11, '2024-11-12 11:50:00'),
-(12, DEFAULT),            
-(13, '2024-11-04 16:30:00'), 
-(14, DEFAULT),            
-(15, '2025-01-06 07:15:00'),
-(1, '2024-11-03 18:00:00'), 
-(3, '2025-01-05 09:45:00'), 
-(5, '2025-01-07 13:10:00'), 
-(8, '2025-01-08 17:25:00'); 
 CREATE TABLE orderitemtable(
 	orderitemId int AUTO_INCREMENT NOT null,
     orderId int NOT null,
+    productId int NOT null,
+    sellerId int NOT null,
+    price int,
+    amount int DEFAULT 1,
     seller_productId int NOT null,
-    amount int not null,
+    FOREIGN KEY (seller_productId) REFERENCES seller_producttable(seller_productId),
     PRIMARY KEY (orderitemId),
-    FOREIGN KEY (orderId) REFERENCES ordertable(orderId),
-    FOREIGN KEY (seller_productId) REFERENCES seller_producttable(seller_productId)
+    FOREIGN KEY (orderId) REFERENCES ordertable(orderId) ON DELETE CASCADE,
+    FOREIGN KEY (productId) REFERENCES producttable(productId) ON DELETE CASCADE,
+    FOREIGN KEY (sellerId) REFERENCES sellertable(sellerId) ON DELETE CASCADE
 );
-DELIMITER $$ /* stok order için yeterli mi */
+
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_price
+AFTER INSERT ON orderitemtable
+FOR EACH ROW
+BEGIN
+    UPDATE ordertable
+    SET totalPrice = (
+        SELECT SUM(amount * price)
+        FROM orderitemtable
+        WHERE orderId = NEW.orderId
+    )
+    WHERE orderId = NEW.orderId;
+END$$
+
+DELIMITER $$ 
+
 CREATE TRIGGER before_orderitem_insert
 BEFORE INSERT ON orderitemtable
 FOR EACH ROW
 BEGIN
     DECLARE available_stock INT;
-    SELECT stock INTO available_stock
-    FROM seller_producttable
-    WHERE seller_productId = NEW.seller_productId;
+    
+    SELECT sp.stock INTO available_stock
+    FROM seller_producttable sp
+    JOIN sellertable s ON s.sellerId = sp.sellerId
+    JOIN producttable p ON sp.productId = p.productId
+    WHERE sp.seller_productId = NEW.seller_productId;
+    
     IF available_stock < NEW.amount THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Yeterince stok yok.';
+        SET MESSAGE_TEXT = 'Insufficient stock available.';
     END IF;
 END$$
+
+DELIMITER ; 
 DELIMITER ;
 DELIMITER $$ /* stok miktarını azaltıyor alınınca */
 CREATE TRIGGER after_orderitem_insert
@@ -554,50 +544,6 @@ BEGIN
     WHERE seller_productId = NEW.seller_productId;
 END$$
 DELIMITER ;
-INSERT INTO orderitemtable (orderId, seller_productId, amount)
-VALUES
-(1, 1, 2), 
-(1, 2, 1), 
-(1, 3, 3),
-(2, 4, 4), 
-(2, 5, 2),
-(3, 6, 1), 
-(3, 7, 2), 
-(3, 8, 5),
-(4, 9, 1),
-(5, 10, 3), 
-(5, 11, 4), 
-(5, 12, 2),
-(6, 13, 5), 
-(6, 14, 1),
-(7, 15, 2), 
-(7, 16, 4), 
-(7, 17, 3),
-(8, 18, 5), 
-(8, 19, 1),
-(9, 20, 3), 
-(9, 21, 2), 
-(9, 22, 1),
-(10, 23, 4),
-(11, 24, 5), 
-(11, 25, 3),
-(12, 26, 2),
-(13, 27, 1), 
-(13, 28, 4),
-(14, 29, 3),
-(15, 30, 2), 
-(15, 31, 1), 
-(15, 32, 5),
-(16, 33, 4), 
-(16, 34, 3),
-(17, 35, 5), 
-(17, 36, 2), 
-(17, 37, 1),
-(18, 38, 4), 
-(18, 39, 3),
-(19, 40, 2), 
-(19, 1, 1), 
-(19, 2, 5);
 CREATE TABLE methodtable(
     methodtype varchar(30) NOT null UNIQUE,
     PRIMARY KEY (methodtype)
@@ -649,27 +595,6 @@ BEGIN
     );
 END$$
 DELIMITER ;
-INSERT INTO paymenttable (orderId, methodtype)
-VALUES
-(1, "Credit Card"),
-(2, "PayPal"),
-(3, "Debit Card"),
-(4, "Bitpay"),
-(5, "Cash on Delivery"),
-(6, "Apple Pay"),
-(7, "Google Pay"),
-(8, "Bitcoin"),
-(9, "Stripe"),
-(10, "AmazonPay"),
-(11, "Credit Card"),
-(12, "PayPal"),
-(13, "Debit Card"),
-(14, "Bitpay"),
-(15, "Cash on Delivery"),
-(16, "Apple Pay"),
-(17, "Google Pay"),
-(18, "Bitcoin"),
-(19, "Stripe");
 CREATE TABLE admin_categorytable(
 	admin_categoryId int AUTO_INCREMENT NOT null,
     adminId int NOT null,
@@ -690,4 +615,3 @@ VALUES
 (8, 14), (8, 15), (8, 1), (8, 2),
 (9, 3), (9, 4), (9, 5), (9, 6), 
 (10, 7), (10, 8), (10, 9), (10, 10);
-SELECT * FROM producttable;

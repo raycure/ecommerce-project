@@ -28,7 +28,7 @@ function Cart() {
 		<section className='cart-outer-container'>
 			<div>
 				{orderItems.map((orderItem, index) => (
-					<OrderItem key={index} orderData={orderItem.item} />
+					<OrderItem key={index} orderData={orderItem} />
 				))}
 			</div>
 			<Card style={{ padding: '1rem 0.5rem', height: 'max-content' }}>
