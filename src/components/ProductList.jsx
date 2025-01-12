@@ -17,7 +17,7 @@ function ProductList({ selectedCategory, sellerId, Data }) {
 		setPaginationPageNumber(1);
 	}, [
 		selectedCategory,
-		productSelector.showVerifiedSellers,
+		productSelector.showOnlyVerifiedSellers,
 		productSelector.brands,
 	]);
 	console.log('Data', Data);
@@ -31,9 +31,7 @@ function ProductList({ selectedCategory, sellerId, Data }) {
 			(productSelector.maxPrice <= 0 ||
 				product.price <= productSelector.maxPrice);
 		const isSellerValid =
-			productSelector.showOnlyVerifiedSellers === false ||
-			product.showOnlyVerifiedSellers ===
-				productSelector.showOnlyVerifiedSellers;
+			!productSelector.showOnlyVerifiedSellers || product.sellerVerified === 1;
 		const isBrandValid =
 			productSelector.brands.length === 0 ||
 			productSelector.brands.includes(product.brand);
@@ -45,6 +43,8 @@ function ProductList({ selectedCategory, sellerId, Data }) {
 			sellerId === null ||
 			sellerId === undefined ||
 			sellerId === product.seller;
+		console.log('sellerverified', productSelector.showOnlyVerifiedSellers);
+
 		return (
 			isPriceValid &&
 			isSellerValid &&

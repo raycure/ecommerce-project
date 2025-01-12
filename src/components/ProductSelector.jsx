@@ -74,7 +74,7 @@ function ProductSelector({ setProductSelector, sellerId }) {
 					<Form.Text>Satıcı Türü</Form.Text>
 					<Form.Check
 						value={false}
-						name='sellerVerified'
+						name='showOnlyVerifiedSellers'
 						defaultChecked
 						type='radio'
 						label='Tümü'
@@ -83,7 +83,7 @@ function ProductSelector({ setProductSelector, sellerId }) {
 					<Form.Check
 						value={true}
 						onChange={handleProductSelector}
-						name='sellerVerified'
+						name='showOnlyVerifiedSellers'
 						type='radio'
 						label='Doğrulanmış'
 					/>

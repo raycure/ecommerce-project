@@ -29,11 +29,12 @@ const fetchProducts = async (req, res) => {
 			's.verified',
 		];
 
+		let whereConditions = ['s.banned'];
 		const result = await userService.buildSubquery(
 			'',
 			tables,
 			selectColumns,
-			{},
+			whereConditions,
 			joinConditions
 		);
 		tables = [
@@ -55,7 +56,7 @@ const fetchProducts = async (req, res) => {
 		);
 		console.log('finalQuery', finalQuery);
 
-		const [rows] = await pool.query(finalQuery);
+		const [rows] = await pool.query(finalQuery, [0]);
 		const mappedResults = rows.map((item) => {
 			const {
 				stock,

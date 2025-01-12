@@ -8,14 +8,12 @@ import { selectCartItems } from '../../../redux/Slices/OrderInfoSlice';
 function Cart() {
 	const navigate = useNavigate();
 	const orderItems = useSelector(selectCartItems).orderItems;
-	const userInfo = useSelector((state) => state.userInfo.user);
-	console.log('userInfo', userInfo);
+	const userInfo = useSelector((state) => state.userInfo);
 
 	const orderDate = new Date();
 	const userAddress = userInfo?.address;
 	let allOrdersTotal = 0;
 
-	console.log('orderItems', orderItems);
 	orderItems.map((orderItem) => {
 		allOrdersTotal = orderItem.price + allOrdersTotal;
 	});
@@ -35,7 +33,7 @@ function Cart() {
 				<Card.Body>
 					<Card.Title>Sipariş Özeti</Card.Title>
 					<hr />
-					<Card.Text className='mb-1'>Sipariş Adresi: {userAddress}</Card.Text>
+					{/* <Card.Text className='mb-1'>Sipariş Adresi: {userAddress}</Card.Text> */}
 					<Card.Text>
 						Sipariş tarihi: {orderDate.toLocaleDateString('tr')}
 					</Card.Text>
