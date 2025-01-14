@@ -10,19 +10,23 @@ import {
 	setUserType,
 	setUserId,
 	resetUserInfo,
+	selectUserType,
 } from '../redux/Slices/UserInfoSlice';
 import SearchBar from '../components/UI/SearchBar';
+import { requestService } from '../redux/requestService';
+import { selectIsLoggedIn } from '../redux/requestSlice';
 function CustomNavbar() {
 	const dispatch = useDispatch();
-	const userInfo = useSelector((state) => state.userInfo);
 	const handleLogin = () => {
 		dispatch(setUserType('admin'));
 		dispatch(setUserId(123));
 	};
-	const loggedIn = userInfo.userId !== null;
-	const userType = userInfo.userType;
+	let isLoggedIn = useSelector(selectIsLoggedIn);
+	console.log('isLoggedIn', isLoggedIn);
+
+	const userType = useSelector(selectUserType);
 	const handleLogout = () => {
-		dispatch(resetUserInfo());
+		dispatch(requestService({ endpoint: '/user/logout', method: 'POST' }));
 	};
 	return (
 		<Navbar sticky='top' bg='light' data-bs-theme='light'>
@@ -37,7 +41,6 @@ function CustomNavbar() {
 					/>
 				</Navbar.Brand>
 				<Nav className='me-auto'>
-					<p>{userType}</p>
 					<Nav.Link href='/'>Ana Sayfa</Nav.Link>
 					{userType === 'seller' && <Nav.Link href='/shop'>Dükkanım</Nav.Link>}
 					{userType !== 'admin' && (
@@ -50,7 +53,7 @@ function CustomNavbar() {
 				<SearchBar />
 				<Nav>
 					<NavDropdown title={<FaUser />} id='navbarScrollingDropdown'>
-						{loggedIn ? (
+						{isLoggedIn ? (
 							<>
 								<NavDropdown.Item href='/account'>Hesabım</NavDropdown.Item>
 								<NavDropdown.Item onClick={handleLogout}>
@@ -70,7 +73,6 @@ function CustomNavbar() {
 					<Nav.Link href='/cart'>
 						<FaShoppingCart />
 					</Nav.Link>
-					<button onClick={handleLogin}>test login</button>
 				</Nav>
 			</Container>
 		</Navbar>

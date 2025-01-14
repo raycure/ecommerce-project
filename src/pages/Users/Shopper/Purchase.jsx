@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -64,21 +64,18 @@ function Purchase() {
 	const handleMethodClick = (method) => {
 		setSelectedMethod(method);
 	};
+	const navigate = useNavigate();
 	async function handlePaymentSubmit() {
-		dispatch(
+		const response = await dispatch(
 			requestService({
 				method: 'POST',
 				endpoint: '/crud/purchase',
 				data: { orderData, selectedMethod },
 			})
 		);
-		// dispatch(
-		// 	updateOrderDetails({
-		// 		orderId: 12345,
-		// 		methodtype: selectedMethod,
-		// 		paymentamount: paymentTotal,
-		// 	})
-		// );
+		if (response.payload.status === 200) {
+			navigate('/siparislerim');
+		}
 	}
 	return (
 		<Card className='purchase-outer-container'>

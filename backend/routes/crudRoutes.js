@@ -14,6 +14,7 @@ import fetchProductInfo from '../controllers/fetchProductInfo.js';
 import updateSeller from '../controllers/updateSeller.js';
 import purchase from '../controllers/purchase.js';
 import fetchOrders from '../controllers/fetchOrders.js';
+import deleteUser from '../controllers/deleteUser.js';
 const router = express.Router();
 
 router.get(
@@ -30,6 +31,7 @@ router.patch('/updateProduct', authFlow, updateProduct);
 router.get('/sellersProducts', authFlow, fetchSellerProducts);
 router.post('/createProduct', authFlow, createProduct);
 router.post('/deleteProduct', authFlow, deleteProduct);
+router.post('/deleteUser', authFlow, deleteUser);
 router.post('/purchase', authFlow, purchase);
 router.get('/fetchOrders', authFlow, fetchOrders);
 export default router;

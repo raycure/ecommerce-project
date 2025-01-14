@@ -23,14 +23,6 @@ function Login() {
 			[e.target.name]: e.target.value,
 		}));
 	};
-	async function handleTest() {
-		const response = await dispatch(
-			requestService({
-				endpoint: '/user/login',
-				method: 'POST',
-			})
-		);
-	}
 	async function handleFormSubmit() {
 		const response = await dispatch(
 			requestService({
@@ -39,6 +31,9 @@ function Login() {
 				method: 'POST',
 			})
 		);
+		if (response.payload.data.userType === 'seller') {
+			navigate('/shop');
+		}
 		if (response.payload.status === 200) {
 			localStorage.setItem('accessToken', response.payload.data.accessToken);
 			navigate('/');
@@ -100,13 +95,6 @@ function Login() {
 					</Button>
 				</span>
 			</Form>
-			<Button
-				style={{ marginInline: 'auto' }}
-				onClick={handleTest}
-				variant='outline-primary'
-			>
-				test
-			</Button>
 		</>
 	);
 }

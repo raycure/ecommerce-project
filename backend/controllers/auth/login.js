@@ -69,11 +69,14 @@ const login = async (req, res) => {
 			path: '/',
 			secure: false,
 		});
+		console.log('existingUser', existingUser);
 
 		return res.status(200).json({
 			accessToken: accessToken,
 			userType: idType,
 			message: 'basarili bir sekilde giris yaptiniz',
+			userId,
+			existingUser,
 		});
 	} catch (error) {
 		console.log('error', error);

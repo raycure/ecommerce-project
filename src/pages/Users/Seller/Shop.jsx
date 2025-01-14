@@ -6,10 +6,9 @@ import Image from 'react-bootstrap/Image';
 import Card from 'react-bootstrap/Card';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Button from 'react-bootstrap/Button';
-import { data, Link } from 'react-router';
+import { Link } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useProducts } from '../../../services/productStore';
-import { useEffect } from 'react';
 import { selectUserType } from '../../../redux/Slices/UserInfoSlice';
 import { useSearchParams } from 'react-router';
 import { requestService } from '../../../redux/requestService';
@@ -17,6 +16,8 @@ function Shop() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = useSelector(selectUserType);
+	console.log('userInfo', userInfo);
+
 	const userId = userInfo.userId;
 	const buttonConStyle = {
 		display: 'flex',
@@ -28,7 +29,9 @@ function Shop() {
 	const dispatch = useDispatch();
 
 	const [searchParams] = useSearchParams();
-	const sellerId = searchParams.get('sellerId');
+	const sellerId = searchParams.get('sellerId') || userId;
+	console.log('sellerId', sellerId);
+
 	async function updateSeller(updateType) {
 		try {
 			console.log('updateType', updateType);

@@ -7,7 +7,6 @@ const fetcherBasedOnUserType = async (req, res, next) => {
 		if (!req.isAuthenticated) {
 			return next();
 		}
-
 		const accessToken = req.accessToken;
 		const decoded = jwt.decode(accessToken, process.env.ACCESS_TOKEN_SECRET);
 		const userType = decoded.userType;
@@ -41,7 +40,3 @@ const fetcherBasedOnUserType = async (req, res, next) => {
 };
 
 export default fetcherBasedOnUserType;
-
-// const fetchProducts = (await import('../controllers/fetchProducts.js'))
-// 	.default;
-// return fetchProducts(req, res);

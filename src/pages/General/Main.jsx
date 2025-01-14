@@ -14,6 +14,7 @@ function Main() {
 		isFetching,
 		dataUpdatedAt,
 	} = useProducts();
+	console.log('data', Data);
 
 	return (
 		<>

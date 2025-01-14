@@ -19,6 +19,7 @@ function AccountInfo() {
 		isFetching,
 		dataUpdatedAt,
 	} = useUserInfo(url);
+	console.log('account', account);
 
 	const userInfo = useSelector((state) => state.userInfo);
 	const userType = userInfo.userType;
@@ -43,6 +44,7 @@ function AccountInfo() {
 				address: response?.address || '',
 				email: response?.email || '',
 				phone: response?.phone || '',
+				image: response?.image || '',
 			});
 			setInputFullNameValue(
 				`${response?.name || ''} ${response?.surname || ''}`.trim()
@@ -93,7 +95,14 @@ function AccountInfo() {
 		);
 		console.log('res', response);
 	};
-	const handleUserAccountInfoDelete = () => {};
+	async function handleUserAccountInfoDelete() {
+		const response = dispatch(
+			requestService({
+				endpoint: '/crud/deleteUser',
+				method: 'POST',
+			})
+		);
+	}
 	return (
 		<Form className='account-info-outer-con'>
 			<Card.Title>Hesap Bilgilerim</Card.Title>

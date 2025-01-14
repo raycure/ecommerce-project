@@ -16,6 +16,7 @@ function Orders() {
 		isFetching,
 		dataUpdatedAt,
 	} = useUserInfo(url);
+	console.log('ORDERES', Data);
 
 	if (!Data) return <div>No products found</div>;
 

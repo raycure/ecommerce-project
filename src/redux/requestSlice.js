@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { setUserType } from './Slices/UserInfoSlice.js';
+import {
+	resetUserInfo,
+	setUserId,
+	setUser,
+	setUserType,
+} from './Slices/UserInfoSlice.js';
 import axios from '../config/axios.js';
 const initialState = {
 	isLoggedIn: false,
@@ -26,7 +31,6 @@ async function setupAxiosDefaults() {
 	if (accesstoken !== 'undefined') {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${accesstoken}`;
 	} else {
-		// console.log('accestoken silinmis');
 		// delete axios.defaults.headers.common['Authorization'];
 	}
 }
@@ -43,11 +47,16 @@ export const fetchData = createAsyncThunk(
 				params: method === 'GET' ? data : undefined,
 				method,
 			});
-			// console.log('response in slice', response);
 
 			if (url.includes('/login') || url.includes('/register')) {
-				console.log('setting user type', response.data.userType);
 				dispatch(setUserType(response.data.userType));
+				dispatch(setUser(response.data.existingUser));
+				if (response.data.userType === 'seller') {
+					dispatch(setUserType(response.data.userId));
+				}
+			}
+			if (url.includes('/logout')) {
+				dispatch(resetUserInfo());
 			}
 
 			return {
@@ -99,6 +108,7 @@ const requestSlice = createSlice({
 				}
 				if (action.payload.endpoint.includes('/logout')) {
 					state.isLoggedIn = false;
+					localStorage.removeItem('accessToken');
 				}
 			})
 			.addCase(fetchData.rejected, (state, action) => {

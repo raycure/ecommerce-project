@@ -33,16 +33,16 @@ cembalcı@yahoo.com
 balcicem
 
 seller
-yaseminguven@gmail.com 
+yaseminguven@gmail.com
 05523456790
-guvenyasemin
+guvenyasemin    
+("Orhan", "Akkoyun", "05438765432", "orhanakkoyun@gmail.com", FALSE, TRUE, "akkoyunorhan", "https://i.pinimg.com/736x/31/68/a5/3168a50fa7626b2150c7bffde6ce5f96.jpg"),
 
 
 customer 
 merveaslan@gmail.com
 05324757384
 merveaslanpass
-
 
 orhanakkoyun@gmail.com
 05438765432
@@ -53,5 +53,12 @@ alituran@gmail.com
 05323456789
 turanali
 
-SELECT * FROM sellertable;
-SELECT * FROM seller_producttable;
+
+todo
+fix the bug with adding products
+ add deleting accounts
+ test the whole moon site
+
+in process
+
+done

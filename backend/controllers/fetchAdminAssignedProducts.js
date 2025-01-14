@@ -45,7 +45,7 @@ const fetchSellers = async (req, res) => {
 			sellertable: 's.sellerId = sp.sellerId',
 		};
 		selectColumns = [
-			'subq.*, b.name as brandName, sp.price, s.name as sellerName, s.surname as sellerSurname, s.sellerId',
+			'subq.*, b.name as brandName, sp.price, s.name as sellerName, s.surname as sellerSurname, s.sellerId, s.verified',
 		];
 
 		const finalQuery = await userService.buildFullQuery(
@@ -71,6 +71,7 @@ const fetchSellers = async (req, res) => {
 				category,
 				description,
 				sellerId,
+				verified,
 				image,
 				brandName: brand,
 			} = item;
@@ -80,9 +81,10 @@ const fetchSellers = async (req, res) => {
 				brand,
 				sellerId,
 				productId,
-				seller: sellerName + ' ' + sellerSurname,
+				sellerFullName: sellerName + ' ' + sellerSurname,
 				price,
 				category,
+				sellerVerified: verified,
 				title,
 			};
 		});
@@ -92,12 +94,10 @@ const fetchSellers = async (req, res) => {
 		});
 	} catch (error) {
 		console.log('error in fetchSellers', error);
-
-		// return res.status(500).json({
-		// 	success: false,
-		// 	message: 'Internal server error',
-		// 	error: process.env.NODE_ENV === 'development' ? error.message : undefined,
-		// });
+		return res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
 	}
 };
 

@@ -15,7 +15,6 @@ const fetchUserInfo = async (req, res) => {
 		const userIdentifaction = { phone, email, table };
 
 		const response = await userService.findData(userIdentifaction);
-		// console.log('res', response);
 
 		return res.status(200).json({
 			response,
@@ -31,21 +30,17 @@ const fetchUserInfo = async (req, res) => {
 
 const updateUserController = async (req, res) => {
 	try {
-		console.log('reached updateUserController');
-
 		const accessToken = req.accessToken;
 		const userId = req.userId;
 		const decoded = jwt.decode(accessToken, process.env.ACCESS_TOKEN_SECRET);
-		console.log('decoded', decoded);
-
 		const { phone: oldPhone, email: oldEmail, userType } = decoded;
 		console.log('req.body,', req.body);
 
 		const table = await userService.getTheTableNameByUserType(userType);
 		const identificationData = { email: oldEmail, phone: oldPhone, table };
 		console.log('identificationData', identificationData);
-
-		const { name, surname, address, phone, email } = req.body;
+		const { name, surname, address, phone, email, image } = req.body;
+		console.log('req.body ', req.body);
 
 		const updateData = {
 			name,
@@ -53,8 +48,8 @@ const updateUserController = async (req, res) => {
 			...(address ? { address } : {}),
 			email,
 			phone,
+			image,
 		};
-		console.log('req.body ', req.body);
 
 		const updatedUser = await userService.updateData(
 			identificationData,
